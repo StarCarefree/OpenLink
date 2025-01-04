@@ -1,15 +1,13 @@
 package fun.moystudio.openlink.forge;
 
-import com.mojang.brigadier.CommandDispatcher;
 import fun.moystudio.openlink.frpc.Frpc;
 import fun.moystudio.openlink.logic.EventCallbacks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraftforge.client.event.RegisterClientCommandsEvent;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -26,7 +24,7 @@ public final class OpenLinkForge {
     }
 
     @SubscribeEvent
-    public static void onClientScreenInit(ScreenEvent.InitScreenEvent event){
+    public static void onClientScreenInit(ScreenEvent.Init event){
         EventCallbacks.onScreenInit(event.getScreen().getMinecraft(), event.getScreen());
     }
 
@@ -37,7 +35,7 @@ public final class OpenLinkForge {
     }
 
     @SubscribeEvent
-    public static void onLevelClear(WorldEvent.Unload event){
+    public static void onLevelClear(LevelEvent.Unload event){
         EventCallbacks.onLevelClear();
     }
 
