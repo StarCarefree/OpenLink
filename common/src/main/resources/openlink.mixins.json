@@ -10,7 +10,7 @@
     "MinecraftMixin"
   ],
   "mixins": [
-    "PlayerMixin"
+    "UUIDUtilMixin"
   ],
   "injectors": {
     "defaultRequire": 1
