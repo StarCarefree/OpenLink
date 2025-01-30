@@ -21,7 +21,7 @@ public class Utils {
                         .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, literalText((SettingScreen.sensitiveInfoHiding?"§k":"")+connectAddress)))));
     }
     public static ResourceLocation createResourceLocation(String namespace, String path) {
-        return new ResourceLocation(namespace,path);
+        return ResourceLocation.fromNamespaceAndPath(namespace,path);
     }
 
 }

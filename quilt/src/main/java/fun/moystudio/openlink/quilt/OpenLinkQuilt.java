@@ -1,16 +1,16 @@
 package fun.moystudio.openlink.quilt;
 
 import fun.moystudio.openlink.OpenLink;
-import org.quiltmc.loader.api.ModContainer;
+import net.fabricmc.api.ModInitializer;
 import org.quiltmc.loader.api.QuiltLoader;
 import org.quiltmc.loader.impl.QuiltLoaderImpl;
-import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
+
 
 import fun.moystudio.openlink.fabriclike.OpenLinkFabricLike;
 
 public final class OpenLinkQuilt implements ModInitializer {
     @Override
-    public void onInitialize(ModContainer mod) {
+    public void onInitialize() {
         // Run the Fabric-like setup.
         try {
             OpenLinkFabricLike.init(QuiltLoader.getModContainer(OpenLink.MOD_ID).get().metadata().version().raw(),"Quilt", QuiltLoaderImpl.VERSION);

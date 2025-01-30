@@ -11,7 +11,7 @@ import fun.moystudio.openlink.logic.WebBrowser;
 import fun.moystudio.openlink.network.*;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.*;
-import net.minecraft.client.gui.screens.LanguageSelectScreen;
+import net.minecraft.client.gui.screens.options.LanguageSelectScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.*;
 import java.util.List;

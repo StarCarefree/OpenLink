@@ -18,7 +18,7 @@ logoFile = "icon.png"
 modId = "neoforge"
 type="required"
 # And here
-versionRange = "[20,)"
+versionRange = "[21,)"
 ordering = "NONE"
 side = "CLIENT"
 
@@ -26,7 +26,7 @@ side = "CLIENT"
 modId = "minecraft"
 type="required"
 # Change Minecraft Version here(version migrate)
-versionRange = "[1.20.4,)"
+versionRange = "[1.21,)"
 ordering = "NONE"
 side = "CLIENT"
 

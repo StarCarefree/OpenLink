@@ -7,14 +7,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.commands.Commands;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
 import net.neoforged.neoforge.client.event.ScreenEvent;
-import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.level.LevelEvent;
 import net.neoforged.neoforge.internal.versions.neoforge.NeoForgeVersion;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 @Mod(OpenLink.MOD_ID)
 public final class OpenLinkNeoForge {
     public OpenLinkNeoForge() throws Exception {
@@ -38,7 +39,7 @@ public final class OpenLinkNeoForge {
     }
 
     @SubscribeEvent
-    public static void onClientTick(TickEvent.ClientTickEvent event){
+    public static void onClientTick(ClientTickEvent.Post event){
         EventCallbacks.onClientTick(Minecraft.getInstance());
     }
 }

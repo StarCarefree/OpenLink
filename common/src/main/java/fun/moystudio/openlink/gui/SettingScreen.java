@@ -365,7 +365,6 @@ public class SettingScreen extends Screen {
         public int x0,y0,x1,y1;
         public LogObjectSelectionList(Minecraft minecraft, int width, int height, int x0, int y0, int x1, int y1, int itemHeight) {
             super(minecraft, width, height, y0, itemHeight);
-            this.setRenderBackground(false);
             this.setRenderHeader(false,0);
             this.setPosition(x0, y0);
             this.setSize(width, height - y0);
@@ -486,7 +485,6 @@ public class SettingScreen extends Screen {
         public int x0,y0,x1,y1;
         public InfoObjectSelectionList(Minecraft minecraft, int width, int height, int x0, int y0, int x1, int y1, int itemHeight) {
             super(minecraft, width, height, y0, itemHeight);
-            this.setRenderBackground(false);
             this.setRenderHeader(false,0);
             this.addEntry(new Entry(informationList));
             this.setPosition(x0, y0);
