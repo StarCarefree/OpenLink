@@ -1,0 +1,57 @@
+name: Multiversion Merge
+
+on:
+  - workflow_dispatch
+
+jobs:
+  sync_and_merge:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Create PR from 1.19.2 to master
+        id: pr_1_19_2_to_master
+        run: |
+          PR_URL=$(gh pr create --label "multiversion" --title "Sync master to 1.19.2" --body "Auto merge sync" --base 1.19.2 --head master || echo "")
+          echo "pr_url=$PR_URL" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ github.token }}
+        
+      - name: Auto-merge PR from 1.19.2 to 1.20.1
+        uses: pascalgn/automerge-action@v0.16.3
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          MERGE_LABELS: "multiversion"
+          
+      - name: Create PR from 1.20.1 to 1.19.2
+        id: pr_1_20_1_to_1_19_2
+        run: |
+          PR_URL=$(gh pr create --label "multiversion" --title "Sync 1.19.2 to 1.20.1" --body "Auto merge sync" --base 1.20.1 --head 1.19.2 || echo "")
+          echo "pr_url=$PR_URL" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Auto-merge PR from 1.20.1 to 1.19.2
+        uses: pascalgn/automerge-action@v0.16.3
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          MERGE_LABELS: "multiversion"
+
+      - name: Create PR from 1.20.4 to 1.20.1
+        id: pr_1_20_4_to_1_20_1
+        run: |
+          PR_URL=$(gh pr create --label "multiversion" --title "Sync 1.20.1 to 1.20.4" --body "Auto merge sync" --base 1.20.4 --head 1.20.1 || echo "")
+          echo "pr_url=$PR_URL" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Auto-merge PR from 1.20.4 to 1.20.1
+        uses: pascalgn/automerge-action@v0.16.3
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          MERGE_LABELS: "multiversion"
