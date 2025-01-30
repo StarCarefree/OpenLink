@@ -102,11 +102,6 @@ public class NodeSelectionScreen extends Screen {
         }
 
         @Override
-        protected int getScrollbarPosition() {
-            return super.getScrollbarPosition() + 20;
-        }
-
-        @Override
         public int getRowWidth() {
             return super.getRowWidth() + 50;
         }
