@@ -10,6 +10,7 @@ public class Uris {
     public static final URI openFrpAPIUri;
     public static final URI ipstackUri;
     public static final URI weavatarUri;
+    public static final URI advertiseUri;
     static {
         try {
             frpcDownloadUri = new URI("https://o.of.cd/client/");
@@ -18,6 +19,7 @@ public class Uris {
             openFrpAPIUri = new URI("https://api.openfrp.net/");
             ipstackUri = new URI("https://fcd09628a76b.aapq.net/ip");
             weavatarUri = new URI("https://weavatar.com/avatar/");
+            advertiseUri = new URI("https://started.ink/");
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
