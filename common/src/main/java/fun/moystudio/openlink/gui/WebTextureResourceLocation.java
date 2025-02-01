@@ -2,6 +2,7 @@ package fun.moystudio.openlink.gui;
 
 import com.mojang.blaze3d.platform.NativeImage;
 import fun.moystudio.openlink.OpenLink;
+import fun.moystudio.openlink.logic.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 
@@ -22,8 +23,10 @@ public class WebTextureResourceLocation {
             HttpsURLConnection connection=(HttpsURLConnection) url1.openConnection();
             InputStream stream=connection.getInputStream();
             NativeImage image=NativeImage.read(stream);
-            location=Minecraft.getInstance().getTextureManager().register("avatar",new SelfCleaningDynamicTexture(image));
+            ResourceLocation loc=Utils.createResourceLocation("openlink","avatar.png");
+            Minecraft.getInstance().getTextureManager().register(loc,new SelfCleaningDynamicTexture(image));
             stream.close();
+            location=loc;
         } catch (Exception e){
             e.printStackTrace();
             OpenLink.LOGGER.error("Error on loading avatar web texture");

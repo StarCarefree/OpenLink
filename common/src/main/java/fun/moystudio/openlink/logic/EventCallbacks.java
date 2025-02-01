@@ -44,7 +44,7 @@ public class EventCallbacks {
         }
         if(screen instanceof TitleScreen){
             if(OpenLink.LOADER.equals("NeoForge")){
-                ((IScreenAccessor)screen).invokeAddRenderableWidget(new ImageButtonWithHoveredState(screen.width / 2 + 129, screen.height / 4 + 32 + 22 + 72 + 12,
+                ((IScreenAccessor)screen).invokeAddRenderableWidget(new ImageButtonWithHoveredState(screen.width / 2 + 129, screen.height / 4 + 32 + 24 + 72 + 12,
                         20, 20, OPENLINK_SETTING, OPENLINK_SETTING_HOVERED, (button) -> minecraft.setScreen(new SettingScreen(null))));
                 return;
             }

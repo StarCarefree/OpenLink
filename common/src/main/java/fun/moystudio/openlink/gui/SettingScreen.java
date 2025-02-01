@@ -205,7 +205,7 @@ public class SettingScreen extends Screen {
     @Override
     public void render(GuiGraphics guiGraphics, int i, int j, float f){
         renderBackground(guiGraphics,i,j,f);
-        guiGraphics.blit(BACKGROUND_SETTING,0,0,0,0,this.width,this.height,this.width,this.height);
+        guiGraphics.blit(RenderType::guiTextured,BACKGROUND_SETTING,0,0,0,0,this.width,this.height,this.width,this.height);
         guiGraphics.fill(5,60,this.buttonSetting.getX()+this.buttonSetting.getWidth(),this.height-5,0x8F000000);
         title.renderCentered(guiGraphics,this.width/2,15);
         if(renderableTabWidgets!=null) renderableTabWidgets.forEach(widget -> widget.render(guiGraphics,i,j,f));
@@ -365,7 +365,6 @@ public class SettingScreen extends Screen {
         public int x0,y0,x1,y1;
         public LogObjectSelectionList(Minecraft minecraft, int width, int height, int x0, int y0, int x1, int y1, int itemHeight) {
             super(minecraft, width, height, y0, itemHeight);
-            this.setRenderHeader(false,0);
             this.setPosition(x0, y0);
             this.setSize(width, height - y0);
             if (this.getSelected() != null) {
@@ -391,11 +390,6 @@ public class SettingScreen extends Screen {
         @Override
         public int getRowWidth() {
             return this.width-20;
-        }
-
-        @Override
-        public int getScrollbarPosition() {
-            return this.x0+this.width-7;
         }
 
         public Entry ofEntry(String filePath, String levelName, String date, String startTime, String proxyid, String provider) {
@@ -485,7 +479,6 @@ public class SettingScreen extends Screen {
         public int x0,y0,x1,y1;
         public InfoObjectSelectionList(Minecraft minecraft, int width, int height, int x0, int y0, int x1, int y1, int itemHeight) {
             super(minecraft, width, height, y0, itemHeight);
-            this.setRenderHeader(false,0);
             this.addEntry(new Entry(informationList));
             this.setPosition(x0, y0);
             this.setSize(width, height - y0);
