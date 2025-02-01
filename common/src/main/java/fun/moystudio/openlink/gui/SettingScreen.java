@@ -7,6 +7,7 @@ import fun.moystudio.openlink.json.JsonResponseWithData;
 import fun.moystudio.openlink.json.JsonUserInfo;
 import fun.moystudio.openlink.logic.SettingTabs;
 import fun.moystudio.openlink.logic.Utils;
+import fun.moystudio.openlink.logic.WebBrowser;
 import fun.moystudio.openlink.mixin.IScreenAccessor;
 import fun.moystudio.openlink.network.Request;
 import fun.moystudio.openlink.network.Uris;
@@ -15,8 +16,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
@@ -516,18 +516,33 @@ public class SettingScreen extends Screen {
             return this.x0+this.width-7;
         }
 
-        public static class Information{
+        public static class Information implements GuiEventListener {
             public boolean inChart;
             public Component component;
             public Information(Component component,boolean inChart){
                 this.inChart=inChart;
-                this.component=component;
+                if(component.getString().contains("§n")){
+                    MutableComponent component1 = (MutableComponent) component;
+                    component1.withStyle((style ->style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, component1)).withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,component1.getString().substring(component1.getString().lastIndexOf("§n")+2)))));
+                    System.out.println(component1.getString());
+                    this.component=component1;
+                }
+                else {
+                    this.component=component;
+                }
             }
             public void render(GuiGraphics guiGraphics, int x, int y, int width){
                 if(inChart){
                     guiGraphics.fill(x, y, x + width, y + Minecraft.getInstance().font.lineHeight+5, 0x8f2b2b2b);
                 }
                 guiGraphics.drawString(Minecraft.getInstance().font, this.component, x+(inChart?4:0), y+2, 0xffffffff);
+            }
+            @Override
+            public boolean mouseClicked(double d, double e, int i) {
+                if(this.component.getStyle().getClickEvent()!=null&&this.component.getStyle().getClickEvent().getAction().equals(ClickEvent.Action.OPEN_URL)){
+                    new WebBrowser(Uris.advertiseUri.toString()).openBrowser();
+                }
+                return this.component.getStyle().getClickEvent()!=null;
             }
         }
 
@@ -551,6 +566,16 @@ public class SettingScreen extends Screen {
                     this.informations.get(i1).render(guiGraphics,x,y+i1*(Minecraft.getInstance().font.lineHeight+5),entryWidth);
                 }
 
+            }
+
+            @Override
+            public boolean mouseClicked(double d, double e, int i) {
+                for (Information information:informations){
+                    if(information.mouseClicked(d,e,i)){
+                        return true;
+                    }
+                }
+                return super.mouseClicked(d, e, i);
             }
         }
     }
