@@ -1,0 +1,18 @@
+name: pin issue based on label
+
+on: 
+  issues:
+    types: [labeled]
+
+jobs:
+  pinAnIssue:
+    name: pin 合集/Collection issue
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: pin 合集/Collection issue
+      uses: bdougie/issue-pin-by-label@master
+
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        LABEL_NAME: 合集/Collection
