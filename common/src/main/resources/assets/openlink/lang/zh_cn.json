@@ -18,7 +18,7 @@
   "text.openlink.creatingproxy": "§b§o[OpenLink] 正在创建联机隧道...",
   "text.openlink.doubleclick": "双击打开： %s",
   "text.openlink.frpcstartsuccessfully": "§b§o[OpenLink] 隧道启动成功！\n点击复制连接IP：§l[%s§b§o§l]",
-  "text.openlink.info": "0Frpc信息：\n1版本：%1$s\n0模组信息：\n1版本：%2$s\n1加载器版本：%3$s\n0本地化：\n1简体中文、英语（美国）：StarCarefree\n1繁体中文（港/台）：Rimon12_HK\n1印度尼西亚语：Floo\n1韩/日语：biantwin\n1德语：Дмитрий Делов\n1中文（文言文）：Yamisafa、Rimon12_HK\n0作者信息：\n1程序：Terry_MC\n1策划：zirran_Ya\n1团队：StarCarefree\n0许可证：SCAUP & MIT",
+  "text.openlink.info": "0Frpc信息：\n1版本：%1$s\n0模组信息：\n1版本：%2$s\n1加载器版本：%3$s\n0本地化：\n1简体中文 & 英语（美国）：StarCarefree\n1繁体中文（港 & 台）：Rimon12_HK\n1印度尼西亚语：Floo\n1韩 & 日语：biantwin\n1俄语：Дмитрий Делов\n1中文（文言文）：Yamisafa、Rimon12_HK\n0作者信息：\n1程序：Terry_MC\n1策划：zirran_Ya、TheFlareStar\n1美术：LPe806\n1团队：StarCarefree\n0许可证：SCAUP & MIT\n0更多信息：\n1想要更稳定流程的联机体验？\n1不妨试试星遥游戏 - 联机面板。\n1§nhttps://started.ink/",
   "text.openlink.lanlogintips": "§o§l§c请先在 OpenLink 设置中登录您的 Natayark 帐户\n(如果您想要使用联机代理服务：>)",
   "text.openlink.loading": "加载中...",
   "text.openlink.local_port": "本地端口（选填）",
