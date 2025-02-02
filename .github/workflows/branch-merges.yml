@@ -1,0 +1,56 @@
+name: Auto Merge Crowdin Changes
+
+on:
+  workflow_dispatch: # 手动触发工作流
+
+permissions:
+  contents: write # 确保有写入权限以推送合并结果
+
+jobs:
+  auto-merge:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: 检出代码库
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # 确保拉取完整的 Git 历史记录
+
+      # Step 2: Merge master -> 1.19.2
+      - name: Merge master to 1.19.2
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git checkout 1.19.2 || git checkout -b 1.19.2
+          git merge --no-ff master -m "Auto-merge master into 1.19.2"
+          git push origin 1.19.2
+
+      # Step 3: Merge 1.19.2 -> 1.20.1
+      - name: Merge 1.19.2 to 1.20.1
+        run: |
+          git checkout 1.20.1 || git checkout -b 1.20.1
+          git merge --no-ff 1.19.2 -m "Auto-merge 1.19.2 into 1.20.1"
+          git push origin 1.20.1
+
+      # Step 4: Merge 1.20.1 -> 1.20.4
+      - name: Merge 1.20.1 to 1.20.4
+        run: |
+          git checkout 1.20.4 || git checkout -b 1.20.4
+          git merge --no-ff 1.20.1 -m "Auto-merge 1.20.1 into 1.20.4"
+          git push origin 1.20.4
+
+      # Step 5: Merge 1.20.4 -> 1.21
+      - name: Merge 1.20.4 to 1.21
+        run: |
+          git checkout 1.21 || git checkout -b 1.21
+          git merge --no-ff 1.20.4 -m "Auto-merge 1.20.4 into 1.21"
+          git push origin 1.21
+
+      # Step 6: Merge 1.21 -> 1.21.4
+      - name: Merge 1.21 to 1.21.4
+        run: |
+          git checkout 1.21.4 || git checkout -b 1.21.4
+          git merge --no-ff 1.21 -m "Auto-merge 1.21 into 1.21.4"
+          git push origin 1.21.4
