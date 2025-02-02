@@ -1,27 +1,64 @@
-name: Auto Merge
+name: Auto Merge and Sync Branches
+
 on:
-- pull_request_target
-- workflow_dispatch
+  pull_request_target: # 当有 PR target 事件触发时运行
+  workflow_dispatch:   # 可手动触发此工作流
+
+permissions:
+  contents: write       # 确保拥有内容写入权限
+  pull-requests: write  # 确保拥有PR操作权限
+
 jobs:
   labeler:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # 允许修改PR上的Label
+    steps:
+      - name: Assign Labels using Labeler
+        uses: actions/labeler@v5
+
+  automerge:
+    needs: labeler       # 依赖于上一个任务完成后运行
     runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
     steps:
-      - uses: actions/labeler@v5
-    
-  automerge:
-    needs: labeler
-    runs-on: ubuntu-latest
-    permissions:
-        contents: write
-        pull-requests: write
-    steps:
-      - id: automerge
-        name: automerge
+      - name: Automerge PRs with specific label
         uses: "pascalgn/automerge-action@v0.16.3"
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          MERGE_LABELS: "crowdin"
-          UPDATE_LABELS: "crowdin"
+          MERGE_LABELS: "crowdin"   # 自动合并时需要这个标签
+          UPDATE_LABELS: "crowdin" # 在更新时需要这个标签
+
+  sync-branches:
+    needs: automerge      # 等到 automege 任务执行完成之后运行
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write     # 允许推动变更到远程分支
+    steps:
+      # Checkout repository for branch merging
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # 获取完整的 Git 历史记录，以便进行分支合并
+
+      - name: Sync branches sequentially
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          branches=("master" "1.19.2" "1.20.1" "1.20.4" "1.21" "1.21.4")
+
+          for ((i=0; i<${#branches[@]}-1; i++)); do
+            source_branch=${branches[i]}
+            target_branch=${branches[i+1]}
+
+            echo "Merging $source_branch into $target_branch ..."
+            
+            git checkout $target_branch || git checkout -b $target_branch
+
+            git merge --no-ff $source_branch -m "Auto-merge $source_branch into $target_branch"
+
+            git push origin $target_branch || { echo "Failed to push $target_branch"; exit 1; }
+          done
