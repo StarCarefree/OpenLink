@@ -41,10 +41,10 @@ public class ConflictSelectionScreen extends Screen {
     }
     @Override
     public void render(GuiGraphics guiGraphics, int i, int j, float f) {
+        super.render(guiGraphics,i,j,f);
         conflictSelectionList.render(guiGraphics,i,j,f);
         text.renderCentered(guiGraphics,this.width/2,16,16,0xffffff);
         guiGraphics.drawCenteredString(this.font,Utils.translatableText("text.openlink.conflict_tip"),this.width/2,this.height-58,0xffffff);
-        super.render(guiGraphics,i,j,f);
     }
 
     class ConflictSelectionList extends ObjectSelectionList<ConflictSelectionList.Entry>{
