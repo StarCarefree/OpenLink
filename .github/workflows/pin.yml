@@ -1,18 +1,23 @@
-name: pin issue based on label
+name: Pin issue based on label
 
-on: 
+on:
   issues:
     types: [labeled]
 
 jobs:
   pinAnIssue:
-    name: pin 合集/Collection issue
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - name: pin 合集/Collection issue
-      uses: bdougie/issue-pin-by-label@master
-
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        LABEL_NAME: 合集/Collection
+      - name: Set up GitHub CLI
+        run: |
+          sudo apt update
+          sudo apt install -y gh
+      - name: Pin issue if label matches
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          LABEL_NAME: 合集/Collection
+        run: |
+          if [[ "${{ github.event.label.name }}" == "${LABEL_NAME}" ]]; then
+            gh issue pin $ISSUE_NUMBER -R ${{ github.repository }}
+          fi

@@ -537,6 +537,15 @@ public class SettingScreen extends Screen {
                 }
                 return this.component.getStyle().getClickEvent()!=null;
             }
+
+            @Override
+            public void setFocused(boolean bl) {
+            }
+
+            @Override
+            public boolean isFocused() {
+                return false;
+            }
         }
 
         public static class Entry extends ObjectSelectionList.Entry<Entry> {
