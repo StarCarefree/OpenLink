@@ -16,6 +16,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -503,12 +504,6 @@ public class SettingScreen extends Screen {
         public int getRowWidth() {
             return this.width-20;
         }
-
-        @Override
-        public int getScrollbarPosition() {
-            return this.x0+this.width-7;
-        }
-
         public static class Information implements GuiEventListener {
             public boolean inChart;
             public Component component;
