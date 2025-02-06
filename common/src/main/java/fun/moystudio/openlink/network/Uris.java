@@ -11,6 +11,7 @@ public class Uris {
     public static final URI ipstackUri;
     public static final URI weavatarUri;
     public static final URI advertiseUri;
+    public static final URI crowdinProjectsAPIUri;
     static {
         try {
             frpcDownloadUri = new URI("https://o.of.cd/client/");
@@ -20,6 +21,7 @@ public class Uris {
             ipstackUri = new URI("https://fcd09628a76b.aapq.net/ip");
             weavatarUri = new URI("https://weavatar.com/avatar/");
             advertiseUri = new URI("https://started.ink/");
+            crowdinProjectsAPIUri = new URI("https://crowdin.com/api/v2/projects/");
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
