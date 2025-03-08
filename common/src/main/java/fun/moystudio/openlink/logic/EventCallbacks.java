@@ -28,7 +28,8 @@ public class EventCallbacks {
     private static final ResourceLocation OPENLINK_SETTING_HOVERED = Utils.createResourceLocation("openlink", "textures/gui/setting_button_hovered.png");
 
     public static void onScreenInit(Minecraft minecraft, Screen screen){
-        if(screen instanceof ShareToLanScreen shareToLanScreen){
+        if(screen instanceof ShareToLanScreen){
+            ShareToLanScreen shareToLanScreen = (ShareToLanScreen) screen;
             minecraft.setScreen(new NewShareToLanScreen(((IShareToLanLastScreenAccessor)shareToLanScreen).getLastScreen()));
             return;
         }
