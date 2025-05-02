@@ -48,7 +48,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          branches=("master" "1.19.2" "1.20.1" "1.20.4" "1.21" "1.21.4")
+          branches=("master" "1.19.2" "1.20.1" "1.20.4" "1.21" "1.21.4" "1.21.5")
           for ((i=0; i<${#branches[@]}-1; i++)); do
             source_branch=${branches[i]}
             target_branch=${branches[i+1]}
@@ -57,3 +57,7 @@ jobs:
             git merge --no-ff $source_branch -m "Auto-merge $source_branch into $target_branch"
             git push origin $target_branch || { echo "Failed to push $target_branch"; exit 1; }
           done
+          echo "Merging master into 1.16.5 ..."
+          git checkout 1.16.5 || git checkout -b 1.16.5
+          git merge --no-ff master -m "Auto-merge master into 1.16.5"
+          git push origin 1.16.5 || { echo "Failed to push 1.16.5"; exit 1; }
