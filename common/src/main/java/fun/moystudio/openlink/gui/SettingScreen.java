@@ -305,7 +305,7 @@ public class SettingScreen extends Screen {
                     tabUser.set(0, widget);
                     avatarSha256 = null;
                 }
-                if(first) {
+                if(first && FrpcManager.getInstance().getCurrentFrpcId().equals("openfrp")) {
                     ImageWidget nowavatar=(ImageWidget)tabUser.get(0);
                     ComponentWidget nowuser=(ComponentWidget)tabUser.get(1);
                     ComponentWidget nowid=(ComponentWidget)tabUser.get(2);
