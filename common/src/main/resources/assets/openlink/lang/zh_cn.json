@@ -46,7 +46,7 @@
   "text.openlink.secure": "安全",
   "text.openlink.sslignored": "由于您的网络，SSL已被忽略。您的网络请求将不安全。您是否仍要使用 OpenLink？",
   "text.openlink.sslwarning": "§b§o[OpenLink] §r§3 忽略 SSL 可能会使您的内穿账号和密码不安全. \n§c§o§l请不要将 IP 发送给任何您不信任的人！",
-  "text.openlink.updatefrpc": "§l§g发现一个新的frpc核心！§r§g最新核心版本：§l§u%s§r§g，当前核心版本：§l§u%s§r§g。§6你是否需要更新？",
+  "text.openlink.updatefrpc": "§l§g发现一个新的frpc核心！§6你是否需要更新？",
   "text.openlink.updatingfrpc": "§o§s正在更新Frpc核心...§8(这可能会耗费少许时间)",
   "text.openlink.userproxieslimited": "§c§l您的OpenFrp账户已创建的隧道数达到允许的最大数目。\n请删除一个隧道后再次尝试！",
   "text.openlink.usingfrp": "使用内网穿透",
