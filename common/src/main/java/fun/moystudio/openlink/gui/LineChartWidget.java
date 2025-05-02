@@ -1,6 +1,6 @@
 package fun.moystudio.openlink.gui;
 
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import fun.moystudio.openlink.logic.Utils;
 import net.minecraft.client.gui.Font;

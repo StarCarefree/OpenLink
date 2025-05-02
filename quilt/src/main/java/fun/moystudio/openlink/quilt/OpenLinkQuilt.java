@@ -8,6 +8,9 @@ import org.quiltmc.loader.impl.QuiltLoaderImpl;
 
 import fun.moystudio.openlink.fabriclike.OpenLinkFabricLike;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public final class OpenLinkQuilt implements ModInitializer {
     @Override
     public void onInitialize() {

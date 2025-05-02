@@ -7,6 +7,9 @@ import fun.moystudio.openlink.fabriclike.OpenLinkFabricLike;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.impl.FabricLoaderImpl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public final class OpenLinkFabric implements ModInitializer {
     @Override
     public void onInitialize() {

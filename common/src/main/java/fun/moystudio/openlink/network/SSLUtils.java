@@ -1,8 +1,8 @@
 package fun.moystudio.openlink.network;
 
+import javax.net.ssl.*;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import javax.net.ssl.*;
 
 
 public class SSLUtils {

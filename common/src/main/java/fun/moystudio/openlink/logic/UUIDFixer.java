@@ -1,17 +1,16 @@
 package fun.moystudio.openlink.logic;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
+import org.apache.commons.io.IOUtils;
+
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-
-import org.apache.commons.io.IOUtils;
-
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
 
 public class UUIDFixer {
     public static boolean EnableUUIDFixer = false;

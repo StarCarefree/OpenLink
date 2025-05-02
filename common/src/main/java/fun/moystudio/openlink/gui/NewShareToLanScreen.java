@@ -2,12 +2,12 @@ package fun.moystudio.openlink.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import fun.moystudio.openlink.OpenLink;
-import fun.moystudio.openlink.frpc.Frpc;
+import fun.moystudio.openlink.frpc.FrpcManager;
+import fun.moystudio.openlink.frpc.OpenFrpFrpcImpl;
 import fun.moystudio.openlink.logic.LanConfig;
 import fun.moystudio.openlink.logic.OnlineModeTabs;
-import fun.moystudio.openlink.logic.Utils;
 import fun.moystudio.openlink.logic.UUIDFixer;
-import fun.moystudio.openlink.network.Request;
+import fun.moystudio.openlink.logic.Utils;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -80,7 +80,7 @@ public class NewShareToLanScreen extends Screen {
         if(OpenLink.disabled) return;
         String val = editBox.getValue();
         editBox.setVisible(LanConfig.cfg.use_frp);
-        if(Request.Authorization==null){
+        if(!FrpcManager.getInstance().getCurrentFrpcInstance().isLoggedIn()){
             LanConfig.cfg.use_frp=false;
             editBox.setValue("");
             usingfrp.setValue(false);
@@ -141,19 +141,22 @@ public class NewShareToLanScreen extends Screen {
             UUIDFixer.EnableUUIDFixer=LanConfig.getAuthMode()==OnlineModeTabs.OFFLINE_FIXUUID;
             UUIDFixer.ForceOfflinePlayers=Collections.emptyList();//暂时用着，后面再改
             //以上是(被我修改了一点的)原版的代码，以下是OpenLink的Frpc启动及隧道创建，节点选择等主要功能
-            if(OpenLink.disabled) return;
-            if(!LanConfig.cfg.use_frp){
-                return;
-            }
-            Frpc.openFrp(i,editBox.getValue());
             try {
                 LanConfig.writeConfig();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+            if(OpenLink.disabled) return;
+            if(!LanConfig.cfg.use_frp){
+                return;
+            }
+            new Thread(()->{
+                FrpcManager.getInstance().start(i,editBox.getValue());
+            }, "Frpc starter").start();
+
         },((button1, poseStack, i, j) -> {
             if(OpenLink.disabled) return;
-            if(Request.Authorization==null){
+            if(!FrpcManager.getInstance().getCurrentFrpcInstance().isLoggedIn()){
                 List<Component> list=new ArrayList<>();
                 String[] list1= Utils.translatableText("text.openlink.lanlogintips").getString().split("\n");
                 for(String s:list1){
@@ -178,8 +181,8 @@ public class NewShareToLanScreen extends Screen {
         editBox.setSuggestion(Utils.translatableText("text.openlink.remote_port").getString());
         editBox.setValue(LanConfig.cfg.last_port_value);
         this.addButton(editBox);
-        nodeselection=new Button(this.width/2+5,160,150,20,Utils.translatableText("gui.openlink.nodeselectionscreentitle"),(button)-> this.minecraft.setScreen(new NodeSelectionScreen(this)));
-        nodeselection.active=LanConfig.cfg.use_frp;
+        nodeselection=new Button(this.width/2+5,160,150,20,Utils.translatableText("gui.openlink.nodeselectionscreentitle"),(button)-> this.minecraft.setScreen(FrpcManager.getInstance().getCurrentFrpcInstance().getNodeSelectionScreen(this)));
+        nodeselection.active=LanConfig.cfg.use_frp&&FrpcManager.getInstance().getCurrentFrpcInstance().getNodeSelectionScreen(this)!=null;
         usingfrp=CycleButton.onOffBuilder(LanConfig.cfg.use_frp).create(this.width / 2 - 155, 160, 150, 20, Utils.translatableText("text.openlink.usingfrp"),((cycleButton, bool) -> {
             LanConfig.cfg.use_frp=bool;
             editBox.active=bool;
@@ -196,7 +199,7 @@ public class NewShareToLanScreen extends Screen {
         this.renderBackground(poseStack);
         drawCenteredString(poseStack, this.font, this.title, this.width / 2, 50, 16777215);
         drawCenteredString(poseStack, this.font, INFO_TEXT, this.width / 2, 82, 16777215);
-        //TODO:添加OF提示（见OF开发者群）
+        drawString(poseStack, this.font, Utils.translatableText("text.openlink.frptip", FrpcManager.getInstance().getCurrentFrpcName()),0, this.height-this.font.lineHeight, 0xffffff);
         super.render(poseStack, i, j, f);
     }
 }

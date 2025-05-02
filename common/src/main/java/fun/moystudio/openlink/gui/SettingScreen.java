@@ -5,14 +5,14 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import fun.moystudio.openlink.OpenLink;
-import fun.moystudio.openlink.frpc.Frpc;
+import fun.moystudio.openlink.frpc.FrpcManager;
+import fun.moystudio.openlink.frpc.OpenFrpFrpcImpl;
 import fun.moystudio.openlink.json.JsonResponseWithData;
 import fun.moystudio.openlink.json.JsonUserInfo;
 import fun.moystudio.openlink.logic.SettingTabs;
 import fun.moystudio.openlink.logic.Utils;
 import fun.moystudio.openlink.logic.WebBrowser;
 import fun.moystudio.openlink.mixin.IScreenAccessor;
-import fun.moystudio.openlink.network.Request;
 import fun.moystudio.openlink.network.Uris;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -20,7 +20,8 @@ import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,7 +43,7 @@ import java.util.function.Supplier;
 public class SettingScreen extends Screen {
     public SettingScreen(Screen last) {
         super(Utils.translatableText("gui.openlink.settingscreentitle"));
-        informationList=getInformationList(Frpc.FRPC_VERSION,OpenLink.VERSION,OpenLink.LOADER+" "+OpenLink.LOADER_VERSION);
+        informationList=getInformationList(FrpcManager.getInstance().getCurrentFrpcInstance().getFrpcVersion(FrpcManager.getInstance().getFrpcImplExecutableFile(FrpcManager.getInstance().getCurrentFrpcId())),OpenLink.VERSION,OpenLink.LOADER+" "+OpenLink.LOADER_VERSION);
         lastscreen=last;
     }
     MultiLineLabel title;
@@ -94,34 +95,26 @@ public class SettingScreen extends Screen {
         addButton(buttonUser);
         addButton(buttonSetting);
         //Temp variables
-        ResourceLocation lastlocationimage=!tabUser.isEmpty()?((ImageWidget)tabUser.get(0)).texture:Utils.createResourceLocation("openlink","textures/gui/default_avatar.png");
-        Component lastcomponent1=tabUser.size()>=2?((ComponentWidget)tabUser.get(1)).component: Utils.emptyText();
-        Component lastcomponent2=tabUser.size()>=3?((ComponentWidget)tabUser.get(2)).component: Utils.emptyText();
-        Component lastcomponent3=tabUser.size()>=4?((ComponentWidget)tabUser.get(3)).component: Utils.emptyText();
-        Component lastcomponent4=tabUser.size()>=5?((ComponentWidget)tabUser.get(4)).component: Utils.emptyText();
-        Component lastcomponent5=tabUser.size()>=6?((ComponentWidget)tabUser.get(5)).component: Utils.emptyText();
-        int lastx2=tabUser.size()>=3?((ComponentWidget)tabUser.get(2)).x:10;
-        List<Pair<String,Long>> lastdatapoints=tabUser.size()>=7?((LineChartWidget)tabUser.get(6)).dataPoints:readTraffic();
-        LogObjectSelectionList lastlogselectionlist=!tabLog.isEmpty()?((LogObjectSelectionList)tabLog.get(0)):new LogObjectSelectionList(minecraft,this.buttonSetting.x+this.buttonSetting.getWidth()-5,this.height-5-65,5,65,this.buttonSetting.x+this.buttonSetting.getWidth(),this.height-5,40);
-        lastlogselectionlist.changePos(this.buttonSetting.x+this.buttonSetting.getWidth()-5,this.height-5-65,5,65,this.buttonSetting.x+this.buttonSetting.getWidth(),this.height-5);
-        InfoObjectSelectionList lastinfoselectionlist=!tabInfo.isEmpty()?((InfoObjectSelectionList)tabInfo.get(0)):new InfoObjectSelectionList(minecraft,this.buttonSetting.x+this.buttonSetting.getWidth()-5,this.height-5-65,5,65,this.buttonSetting.x+this.buttonSetting.getWidth(),this.height-5,informationList.size()*(this.minecraft.font.lineHeight+5)+5);
-        lastinfoselectionlist.changePos(this.buttonSetting.x+this.buttonSetting.getWidth()-5,this.height-5-65,5,65,this.buttonSetting.x+this.buttonSetting.getWidth(),this.height-5);
-        //Clear tabs
-        tabUser.clear();
-        tabLogin_User.clear();
-        tabLog.clear();
-        tabSetting.clear();
-        tabInfo.clear();
-        //UserInfo排版用
-        int j=Math.min((this.width-20)/4,(this.height-75)/5*3);
-        //UserInfo
-        tabUser.add(new ImageWidget(10,65,0,0,j,j,j,j,lastlocationimage));
-        tabUser.add(new ComponentWidget(this.font,10,65+j+5,0xffffff,lastcomponent1,false));
-        tabUser.add(new ComponentWidget(this.font,lastx2,65+j+5,0xacacac,lastcomponent2,false));
-        tabUser.add(new ComponentWidget(this.font,10,65+j+5+10,0xacacac,lastcomponent3,false));
-        tabUser.add(new ComponentWidget(this.font,10,65+j+5+20,0xacacac,lastcomponent4,false));
-        tabUser.add(new ComponentWidget(this.font,10,65+j+5+30,0xacacac,lastcomponent5,false));
-        tabUser.add(new LineChartWidget(
+        if(FrpcManager.getInstance().getCurrentFrpcId().equals("openfrp")){
+            ResourceLocation lastlocationimage=!tabUser.isEmpty()?((ImageWidget)tabUser.get(0)).texture:Utils.createResourceLocation("openlink","textures/gui/default_avatar.png");
+            Component lastcomponent1=tabUser.size()>=2?((ComponentWidget)tabUser.get(1)).component: Utils.emptyText();
+            Component lastcomponent2=tabUser.size()>=3?((ComponentWidget)tabUser.get(2)).component: Utils.emptyText();
+            Component lastcomponent3=tabUser.size()>=4?((ComponentWidget)tabUser.get(3)).component: Utils.emptyText();
+            Component lastcomponent4=tabUser.size()>=5?((ComponentWidget)tabUser.get(4)).component: Utils.emptyText();
+            Component lastcomponent5=tabUser.size()>=6?((ComponentWidget)tabUser.get(5)).component: Utils.emptyText();
+            int lastx2=tabUser.size()>=3?((ComponentWidget)tabUser.get(2)).x:10;
+            List<Pair<String,Long>> lastdatapoints=tabUser.size()>=7?((LineChartWidget)tabUser.get(6)).dataPoints:readTraffic();
+            tabUser.clear();
+            //UserInfo排版用
+            int j=Math.min((this.width-20)/4,(this.height-75)/5*3);
+            //UserInfo
+            tabUser.add(new ImageWidget(10,65,0,0,j,j,j,j,lastlocationimage));
+            tabUser.add(new ComponentWidget(this.font,10,65+j+5,0xffffff,lastcomponent1,false));
+            tabUser.add(new ComponentWidget(this.font,lastx2,65+j+5,0xacacac,lastcomponent2,false));
+            tabUser.add(new ComponentWidget(this.font,10,65+j+5+10,0xacacac,lastcomponent3,false));
+            tabUser.add(new ComponentWidget(this.font,10,65+j+5+20,0xacacac,lastcomponent4,false));
+            tabUser.add(new ComponentWidget(this.font,10,65+j+5+30,0xacacac,lastcomponent5,false));
+            tabUser.add(new LineChartWidget(
                     this.font,
                     10+j+20, 65+5,
                     this.width-20, 60+this.height-75-15,
@@ -129,14 +122,40 @@ public class SettingScreen extends Screen {
                     (dataXY, poseStack, i1, j1)-> renderComponentTooltip(poseStack,
                             new ArrayList<>(List.of(Utils.literalText(dataXY.getFirst()+", "+dataXY.getSecond()+"MiB"))),
                             i1,j1)));
-        tabUser.add(new Button(10,65+j+5+40,j,20,Utils.translatableText("text.openlink.logout"),button -> {
-            Request.Authorization=null;
-            Request.writeSession();
-            this.minecraft.setScreen(new SettingScreen(lastscreen));
-        }));
+            tabUser.add(new Button(10,65+j+5+40,j,20,Utils.translatableText("text.openlink.logout"),button -> {
+                FrpcManager.getInstance().getCurrentFrpcInstance().logOut();
+                this.minecraft.setScreen(new SettingScreen(lastscreen));
+            }));
+        } else {
+            tabUser.clear();
+            tabUser.add(new Button(this.width/2-20,this.height/2-10,40,20,Utils.translatableText("text.openlink.logout"),button -> {
+                FrpcManager.getInstance().getCurrentFrpcInstance().logOut();
+                this.minecraft.setScreen(new SettingScreen(lastscreen));
+            }));
+        }
+
+        LogObjectSelectionList lastlogselectionlist=!tabLog.isEmpty()?((LogObjectSelectionList)tabLog.get(0)):new LogObjectSelectionList(minecraft,this.buttonSetting.x+this.buttonSetting.getWidth()-5,this.height-5-65,5,65,this.buttonSetting.x+this.buttonSetting.getWidth(),this.height-5,40);
+        lastlogselectionlist.changePos(this.buttonSetting.x+this.buttonSetting.getWidth()-5,this.height-5-65,5,65,this.buttonSetting.x+this.buttonSetting.getWidth(),this.height-5);
+        InfoObjectSelectionList lastinfoselectionlist=!tabInfo.isEmpty()?((InfoObjectSelectionList)tabInfo.get(0)):new InfoObjectSelectionList(minecraft,this.buttonSetting.x+this.buttonSetting.getWidth()-5,this.height-5-65,5,65,this.buttonSetting.x+this.buttonSetting.getWidth(),this.height-5,informationList.size()*(this.minecraft.font.lineHeight+5)+5);
+        lastinfoselectionlist.changePos(this.buttonSetting.x+this.buttonSetting.getWidth()-5,this.height-5-65,5,65,this.buttonSetting.x+this.buttonSetting.getWidth(),this.height-5);
+        //Clear tabs
+        tabLogin_User.clear();
+        tabLog.clear();
+        tabSetting.clear();
+        tabInfo.clear();
         //UserInfo的Login分屏
-        tabLogin_User.add(new ImageWidget(this.width/2-20-32,(this.height-75)/2+60-32,0,0,64,64,64,64,Utils.createResourceLocation("openlink","textures/gui/openfrp_icon.png")));
-        tabLogin_User.add(new Button(this.width/2+20,(this.height-75)/2+60-10,40,20, Utils.translatableText("text.openlink.login"),(button -> this.minecraft.setScreen(new LoginScreen(new SettingScreen(lastscreen))))));
+        Screen loginScreen = FrpcManager.getInstance().getCurrentFrpcInstance().getLoginScreen(new SettingScreen(lastscreen));
+        ResourceLocation icon = FrpcManager.getInstance().getCurrentFrpcInstance().getIcon();
+        if(loginScreen != null && icon == null){
+            tabLogin_User.add(new Button(this.width/2-20,(this.height-75)/2+60-10,40,20, Utils.translatableText("text.openlink.login"),(button -> this.minecraft.setScreen(loginScreen))));
+        } else if(loginScreen == null && icon != null){
+            tabLogin_User.add(new ImageWidget(this.width/2-32,(this.height-75)/2+60-32,0,0,64,64,64,64,icon));
+        } else if(loginScreen != null) {
+            tabLogin_User.add(new ImageWidget(this.width/2-20-32,(this.height-75)/2+60-32,0,0,64,64,64,64,icon));
+            tabLogin_User.add(new Button(this.width/2+20,(this.height-75)/2+60-10,40,20, Utils.translatableText("text.openlink.login"),(button -> this.minecraft.setScreen(loginScreen))));
+        } else {
+            tabLogin_User.add(new ComponentWidget(this.font, this.width/2, (this.height-75)/2+60-10, 0xffffff, Utils.translatableText("temp.openlink.tobedone"), true));
+        }
         //Log
         tabLog.add(lastlogselectionlist);
         //Info
@@ -148,11 +167,13 @@ public class SettingScreen extends Screen {
             sensitiveInfoHiding = object;
             OpenLink.PREFERENCES.putBoolean("setting_sensitive_info_hiding", object);
         }));
-        tabSetting.add(new Button(this.width/2-75,65+70,150,20,Utils.translatableText("text.openlink.ofpanel"),button -> {
-            this.minecraft.keyboardHandler.setClipboard("https://console.openfrp.net/fastlogin?auth="+Request.Authorization);
-            new WebBrowser("https://console.openfrp.net/fastlogin?auth="+Request.Authorization).openBrowser();
-        }));
-        tabSetting.add(new ComponentWidget(this.font,this.width/2,this.height/2,0xffffff, Utils.translatableText("temp.openlink.tobedone"),true));
+        String url = FrpcManager.getInstance().getCurrentFrpcInstance().getPanelUrl();
+        if(url != null) {
+            tabSetting.add(new Button(this.width/2-75,65+70,150,20,Utils.translatableText("text.openlink.webpanel", FrpcManager.getInstance().getCurrentFrpcName()),button -> {
+                this.minecraft.keyboardHandler.setClipboard(url);
+                new WebBrowser(url).openBrowser();
+            }));
+        }
     }
 
     //MouseEventsOverrideBegin
@@ -321,11 +342,11 @@ public class SettingScreen extends Screen {
                 buttonInfo.active=true;
                 buttonUser.active=false;
                 buttonSetting.active=true;
-                if(Request.Authorization==null){
+                if(!FrpcManager.getInstance().getCurrentFrpcInstance().isLoggedIn()){
                     renderableTabWidgets=tabLogin_User;
                     return;
                 }
-                if(first) {
+                if(first && FrpcManager.getInstance().getCurrentFrpcId().equals("openfrp")) {
                     ImageWidget nowavatar=(ImageWidget)tabUser.get(0);
                     ComponentWidget nowuser=(ComponentWidget)tabUser.get(1);
                     ComponentWidget nowid=(ComponentWidget)tabUser.get(2);
@@ -341,10 +362,10 @@ public class SettingScreen extends Screen {
                     tabUser.set(1,nowuser);
                     new Thread(() -> {
                         try {
-                            userInfo = Request.getUserInfo();
+                            userInfo = OpenFrpFrpcImpl.getUserInfo();
                             if(userInfo==null||!userInfo.flag){
-                                Request.Authorization=null;
-                                Request.writeSession();
+                                OpenFrpFrpcImpl.Authorization=null;
+                                OpenFrpFrpcImpl.writeSession();
                                 throw new Exception("[OpenLink] Session expired!");
                             }
                         } catch (Exception e) {
@@ -493,16 +514,16 @@ public class SettingScreen extends Screen {
             // 启动时间
             public final String startTime;
             // 隧道ID
-            public final String proxyid;
+            public final String port;
             // Frp服务提供商名称
             public final String provider;
 
-            public Entry(String filePath,String levelName,String date,String startTime,String proxyid,String provider) {
+            public Entry(String filePath, String levelName, String date, String startTime, String port, String provider) {
                 this.filePath=filePath;
                 this.levelName=levelName;
                 this.date=date;
                 this.startTime=startTime;
-                this.proxyid=proxyid;
+                this.port = port;
                 this.provider=provider;
             }
 
@@ -528,7 +549,7 @@ public class SettingScreen extends Screen {
                 fill(poseStack, x, y, x + entryWidth, y + entryHeight, 0x8f2b2b2b);
                 drawString(poseStack, SettingScreen.LogObjectSelectionList.this.minecraft.font, this.date+" "+this.startTime, x + 4, y + 4, 0x8fffffff);
                 drawString(poseStack, SettingScreen.LogObjectSelectionList.this.minecraft.font, this.levelName, x + 4, y + 4 + (entryHeight-4) / 2, 0x8fffffff);
-                drawString(poseStack, SettingScreen.LogObjectSelectionList.this.minecraft.font, this.proxyid, x + entryWidth - 4 - LogObjectSelectionList.this.minecraft.font.width(this.proxyid), y + 4, 0x8fffffff);
+                drawString(poseStack, SettingScreen.LogObjectSelectionList.this.minecraft.font, this.port, x + entryWidth - 4 - LogObjectSelectionList.this.minecraft.font.width(this.port), y + 4, 0x8fffffff);
                 drawString(poseStack, SettingScreen.LogObjectSelectionList.this.minecraft.font, this.provider, x + entryWidth - 4 - LogObjectSelectionList.this.minecraft.font.width(this.provider), y + 4 + (entryHeight-4) / 2, 0x8fffffff);
                 if(isHovered){
                     renderTooltip(poseStack, Utils.translatableText("text.openlink.doubleclick",new File(filePath).getName()), mouseX, mouseY);
