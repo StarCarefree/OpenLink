@@ -1,11 +1,13 @@
 package fun.moystudio.openlink.fabric;
 
 import fun.moystudio.openlink.OpenLink;
-import net.fabricmc.api.ModInitializer;
-
 import fun.moystudio.openlink.fabriclike.OpenLinkFabricLike;
+import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.impl.FabricLoaderImpl;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class OpenLinkFabric implements ModInitializer {
     @Override

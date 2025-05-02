@@ -1,6 +1,7 @@
 package fun.moystudio.openlink.forge;
 
-import fun.moystudio.openlink.frpc.Frpc;
+import fun.moystudio.openlink.OpenLink;
+import fun.moystudio.openlink.frpc.FrpcManager;
 import fun.moystudio.openlink.logic.EventCallbacks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.Commands;
@@ -8,12 +9,14 @@ import net.minecraftforge.client.event.RegisterClientCommandsEvent;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.level.LevelEvent;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
-
-import fun.moystudio.openlink.OpenLink;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.versions.forge.ForgeVersion;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Mod.EventBusSubscriber
 @Mod(OpenLink.MOD_ID)
@@ -29,9 +32,9 @@ public final class OpenLinkForge {
     }
 
     @SubscribeEvent
-    public static void onClientCommandRegistering(RegisterClientCommandsEvent event){
+    public static void onClientCommandRegistering(RegisterClientCommandsEvent event) {
         event.getDispatcher().register(Commands.literal("proxyrestart")
-                .executes(context -> Frpc.openFrp(Minecraft.getInstance().getSingleplayerServer().getPort(),"")?1:0));
+                .executes(context -> FrpcManager.getInstance().start(Minecraft.getInstance().getSingleplayerServer().getPort(),"")?1:0));
     }
 
     @SubscribeEvent
@@ -42,5 +45,13 @@ public final class OpenLinkForge {
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event){
         EventCallbacks.onClientTick(Minecraft.getInstance());
+    }
+
+    @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+    public static class ModEventBusSubscriber {
+        @SubscribeEvent
+        public static void onFinishLoading(FMLLoadCompleteEvent event) {
+            EventCallbacks.onAllModLoadingFinish();
+        }
     }
 }

@@ -1,16 +1,14 @@
 package fun.moystudio.openlink.gui;
 
 import fun.moystudio.openlink.OpenLink;
-import fun.moystudio.openlink.frpc.Frpc;
+import fun.moystudio.openlink.frpc.FrpcManager;
 import fun.moystudio.openlink.logic.Utils;
+import net.minecraft.Util;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.screens.options.LanguageSelectScreen;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.*;
-
-import java.util.Arrays;
-import java.util.List;
+import net.minecraft.network.chat.CommonComponents;
 
 public class UpdateScreen extends Screen {
     public UpdateScreen() {
@@ -22,24 +20,13 @@ public class UpdateScreen extends Screen {
 
     @Override
     protected void init(){
-
         yes=Button.builder(CommonComponents.GUI_YES,button -> this.minecraft.setScreen(new UpdatingScreen())).bounds(this.width/4-40,this.height/5*4-10,80,20).build();
-        no=Button.builder(CommonComponents.GUI_NO,button -> {if(Frpc.FRPC_VERSION.length()<6)OpenLink.disabled=true;this.onClose();}).tooltip(getTooltip()).bounds(this.width/4*3-40,this.height/5*4-10,80,20).build();
-        text=MultiLineLabel.create(this.font, Utils.translatableText("text.openlink.updatefrpc", Frpc.latestVersion, Frpc.FRPC_VERSION.length()<6 ? "does not exist" : Frpc.FRPC_VERSION),this.width-50);
+        no=Button.builder(CommonComponents.GUI_NO,button -> {if(!FrpcManager.getInstance().isExecutableFileExist(FrpcManager.getInstance().getCurrentFrpcId()))OpenLink.disabled=true;this.onClose();}).bounds(this.width/4*3-40,this.height/5*4-10,80,20).build();
+        text=MultiLineLabel.create(this.font, Utils.translatableText("text.openlink.updatefrpc"),this.width-50);
         this.addRenderableWidget(yes);
         this.addRenderableWidget(no);
         this.addRenderableWidget(Button.builder(Utils.translatableText("text.openlink.openstoragedir"), button -> {
-            try{
-                if(Frpc.osName.equals("windows")){
-                    Runtime.getRuntime().exec(new String[]{"explorer", "/root,"+OpenLink.EXECUTABLE_FILE_STORAGE_PATH});
-                } else if (Frpc.osName.equals("darwin")) {
-                    Runtime.getRuntime().exec(new String[]{"open", OpenLink.EXECUTABLE_FILE_STORAGE_PATH});
-                } else {
-                    Runtime.getRuntime().exec(new String[]{"xdg-open", OpenLink.EXECUTABLE_FILE_STORAGE_PATH});
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            Util.getPlatform().openFile(FrpcManager.getInstance().getFrpcStoragePathById(FrpcManager.getInstance().getCurrentFrpcId()).toFile());
         }).bounds(this.width/2-60, this.height/5*4-10, 120, 20).build());
         //以下为原版语言按钮(修改了一下位置)
         SpriteIconButton spriteiconbutton = this.addRenderableWidget(CommonButtons.language(20, (arg) -> this.minecraft.setScreen(new LanguageSelectScreen(this, this.minecraft.options, this.minecraft.getLanguageManager())), true));
@@ -47,7 +34,7 @@ public class UpdateScreen extends Screen {
     }
 
     private Tooltip getTooltip(){
-        if(Frpc.FRPC_VERSION.length()<6) return Tooltip.create(Utils.translatableText("text.openlink.nofrpcfile"));
+        if(!FrpcManager.getInstance().isExecutableFileExist(FrpcManager.getInstance().getCurrentFrpcId())) return Tooltip.create(Utils.translatableText("text.openlink.nofrpcfile"));
         return Tooltip.create(Utils.emptyText());
     }
 
@@ -59,7 +46,6 @@ public class UpdateScreen extends Screen {
 
     @Override
     public void onClose(){
-        Frpc.hasUpdate = false;
         this.minecraft.setScreen(null);
     }
 }

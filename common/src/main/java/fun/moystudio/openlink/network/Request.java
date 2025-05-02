@@ -1,24 +1,23 @@
 package fun.moystudio.openlink.network;
 
-import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
 import com.mojang.datafixers.util.Pair;
-import fun.moystudio.openlink.OpenLink;
-import fun.moystudio.openlink.json.*;
+import fun.moystudio.openlink.frpc.OpenFrpFrpcImpl;
 
 import javax.net.ssl.HttpsURLConnection;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Request {
-    public static String Authorization=null;
     public final static Map<String,List<String>> DEFAULT_HEADER=new HashMap<>(){{
         put("Content-Type", Collections.singletonList("application/json"));
     }};
-
-    public static String token=null;
 
     public static Pair<String,Map<String, List<String>>> POST(String url, Map<String,List<String>> header, String body) throws Exception {
         Pair<String, Map<String, List<String>>> returnval=POST(url, header, body, false);
@@ -26,9 +25,9 @@ public class Request {
             String temp;
             if(returnval.getSecond().containsKey("Authorization")) temp=returnval.getSecond().get("Authorization").get(0);
             else temp=returnval.getSecond().get("authorization").get(0);
-            if(Authorization==null||!Authorization.equals(temp)){
-                Authorization=temp;
-                writeSession();
+            if(OpenFrpFrpcImpl.Authorization==null||!OpenFrpFrpcImpl.Authorization.equals(temp)){
+                OpenFrpFrpcImpl.Authorization=temp;
+                OpenFrpFrpcImpl.writeSession();
             }
         }
         return returnval;
@@ -70,7 +69,7 @@ public class Request {
         }
     }
 
-    public static String GET(String url, Map<String,List<String>> header) throws Exception{
+    public static Pair<String,Map<String, List<String>>> GET(String url, Map<String,List<String>> header) throws Exception{
         URL postUrl=new URL(url);
         HttpsURLConnection connection=(HttpsURLConnection) postUrl.openConnection();
         connection.setRequestMethod("GET");
@@ -81,7 +80,7 @@ public class Request {
             while((line=br.readLine())!=null){
                 re.append(line.trim());
             }
-            return re.toString();
+            return Pair.of(re.toString(), connection.getHeaderFields());
         }catch (Exception e){
             if(connection.getResponseCode()>=400){
                 BufferedReader br=new BufferedReader(new InputStreamReader(connection.getErrorStream(), StandardCharsets.UTF_8));
@@ -90,7 +89,7 @@ public class Request {
                 while((line=br.readLine())!=null){
                     re.append(line.trim());
                 }
-                return re.toString();
+                return Pair.of(re.toString(), connection.getHeaderFields());
             }
             throw e;
         }
@@ -106,52 +105,49 @@ public class Request {
         return header;
     }
 
-    public static Map<String,List<String>> getHeaderWithAuthorization(Map<String,List<String>> header){
-        if(Authorization==null){
-            return header;
-        }
-        header.put("Authorization", Collections.singletonList(Authorization));
+    public static Map<String,List<String>> getHeaderWithAuthorization(Map<String,List<String>> header,String authorization){
+        header.put("Authorization", Collections.singletonList(authorization));
         return header;
     }
 
-    public static void writeSession() {
-        OpenLink.PREFERENCES.put("authorization", Objects.requireNonNullElse(Authorization, "null"));
-    }
-
-    public static void readSession() {
-        Authorization=OpenLink.PREFERENCES.get("authorization",null);
-
-        if(Authorization==null||Authorization.equals("null")){
-            Authorization=null;
-            OpenLink.LOGGER.warn("The session does not exists in user preferences!");
-            return;
-        }
-        try{
-            JsonResponseWithData<JsonUserInfo> responseWithData = getUserInfo();
-            if(responseWithData==null||!responseWithData.flag){
-                Authorization=null;
-                writeSession();
-                OpenLink.LOGGER.warn("The session has been expired!");
-            }
-        } catch (Exception e){
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static JsonResponseWithData<JsonUserInfo> getUserInfo() throws Exception {
-        if(Authorization==null) return null;
-        Gson gson=new Gson();
-        Pair<String, Map<String, List<String>>> response=POST(Uris.openFrpAPIUri.toString()+"frp/api/getUserInfo",getHeaderWithAuthorization(DEFAULT_HEADER),"{}");
-        JsonResponseWithData<JsonUserInfo> res=gson.fromJson(response.getFirst(), new TypeToken<JsonResponseWithData<JsonUserInfo>>(){}.getType());
-        if(res.data!=null)
-            Request.token=res.data.token;
-        return res;
-    }
-
-    public static JsonResponseWithData<JsonTotalAndList<JsonNode>> getNodeList() throws Exception {
-        if(Authorization==null) return null;
-        Gson gson=new Gson();
-        Pair<String, Map<String, List<String>>> response=POST(Uris.openFrpAPIUri.toString()+"frp/api/getNodeList",getHeaderWithAuthorization(DEFAULT_HEADER),"{}");
-        return gson.fromJson(response.getFirst(), new TypeToken<JsonResponseWithData<JsonTotalAndList<JsonNode>>>(){}.getType());
-    }
+//    public static void writeSession() {
+//        OpenLink.PREFERENCES.put("authorization", Objects.requireNonNullElse(Authorization, "null"));
+//    }
+//
+//    public static void readSession() {
+//        Authorization=OpenLink.PREFERENCES.get("authorization",null);
+//
+//        if(Authorization==null||Authorization.equals("null")){
+//            Authorization=null;
+//            OpenLink.LOGGER.warn("The session does not exists in user preferences!");
+//            return;
+//        }
+//        try{
+//            JsonResponseWithData<JsonUserInfo> responseWithData = getUserInfo();
+//            if(responseWithData==null||!responseWithData.flag){
+//                Authorization=null;
+//                writeSession();
+//                OpenLink.LOGGER.warn("The session has been expired!");
+//            }
+//        } catch (Exception e){
+//            throw new RuntimeException(e);
+//        }
+//    }
+//
+//    public static JsonResponseWithData<JsonUserInfo> getUserInfo() throws Exception {
+//        if(Authorization==null) return null;
+//        Gson gson=new Gson();
+//        Pair<String, Map<String, List<String>>> response=POST(Uris.openFrpAPIUri.toString()+"frp/api/getUserInfo",getHeaderWithAuthorization(DEFAULT_HEADER),"{}");
+//        JsonResponseWithData<JsonUserInfo> res=gson.fromJson(response.getFirst(), new TypeToken<JsonResponseWithData<JsonUserInfo>>(){}.getType());
+//        if(res.data!=null)
+//            Request.token=res.data.token;
+//        return res;
+//    }
+//
+//    public static JsonResponseWithData<JsonTotalAndList<JsonNode>> getNodeList() throws Exception {
+//        if(Authorization==null) return null;
+//        Gson gson=new Gson();
+//        Pair<String, Map<String, List<String>>> response=POST(Uris.openFrpAPIUri.toString()+"frp/api/getNodeList",getHeaderWithAuthorization(DEFAULT_HEADER),"{}");
+//        return gson.fromJson(response.getFirst(), new TypeToken<JsonResponseWithData<JsonTotalAndList<JsonNode>>>(){}.getType());
+//    }
 }

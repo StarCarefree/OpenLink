@@ -1,7 +1,7 @@
 package fun.moystudio.openlink.neoforge;
 
 import fun.moystudio.openlink.OpenLink;
-import fun.moystudio.openlink.frpc.Frpc;
+import fun.moystudio.openlink.frpc.FrpcManager;
 import fun.moystudio.openlink.logic.EventCallbacks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.Commands;
@@ -9,6 +9,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
 import net.neoforged.neoforge.client.event.ScreenEvent;
@@ -30,7 +31,7 @@ public final class OpenLinkNeoForge {
     @SubscribeEvent
     public static void onClientCommandRegistering(RegisterClientCommandsEvent event){
         event.getDispatcher().register(Commands.literal("proxyrestart")
-                .executes(context -> Frpc.openFrp(Minecraft.getInstance().getSingleplayerServer().getPort(),"")?1:0));
+                .executes(context -> FrpcManager.getInstance().start(Minecraft.getInstance().getSingleplayerServer().getPort(),"")?1:0));
     }
 
     @SubscribeEvent
@@ -41,5 +42,13 @@ public final class OpenLinkNeoForge {
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event){
         EventCallbacks.onClientTick(Minecraft.getInstance());
+    }
+
+    @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
+    public static final class ModEventSubscriber {
+        @SubscribeEvent
+        public static void onFinishLoading(FMLLoadCompleteEvent event) {
+            EventCallbacks.onAllModLoadingFinish();
+        }
     }
 }

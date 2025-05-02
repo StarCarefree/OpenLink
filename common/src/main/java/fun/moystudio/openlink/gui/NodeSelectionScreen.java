@@ -1,9 +1,8 @@
 package fun.moystudio.openlink.gui;
 
-import fun.moystudio.openlink.frpc.Frpc;
+import fun.moystudio.openlink.frpc.OpenFrpFrpcImpl;
 import fun.moystudio.openlink.json.JsonNode;
 import fun.moystudio.openlink.logic.Utils;
-import fun.moystudio.openlink.network.Request;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -37,11 +36,11 @@ public class NodeSelectionScreen extends Screen {
         selectionList.changePos(this.width, this.height, 32, this.height-65+4);
         this.addWidget(done=Button.builder(CommonComponents.GUI_DONE, (button) -> {
             if(selectionList==null||selectionList.getSelected()==null||selectionList.getSelected().node.id==-1){
-                Frpc.nodeId=-1;
+                OpenFrpFrpcImpl.nodeId=-1;
                 this.minecraft.setScreen(lastscreen);
                 return;
             }
-            Frpc.nodeId=selectionList.getSelected().node.id;
+            OpenFrpFrpcImpl.nodeId=selectionList.getSelected().node.id;
             this.minecraft.setScreen(lastscreen);
         }).bounds(this.width / 2 - 100, this.height - 38, 200, 20).build());
         this.addWidget(selectionList);
@@ -71,11 +70,11 @@ public class NodeSelectionScreen extends Screen {
             new Thread(()->{
                 List<JsonNode> nodes;
                 try {
-                    nodes=Request.getNodeList().data.list;
+                    nodes=OpenFrpFrpcImpl.getNodeList().data.list;
                     for(JsonNode node:nodes){
                         Entry entry1=new Entry(node);
                         this.addEntry(entry1);
-                        if(node.id==Frpc.nodeId){
+                        if(node.id==OpenFrpFrpcImpl.nodeId){
                             this.setSelected(entry1);
                             this.centerScrollOn(entry1);
                         }
@@ -117,6 +116,7 @@ public class NodeSelectionScreen extends Screen {
                 return Utils.translatableText("narrator.select",this.node.name);
             }
 
+            @Override
             public boolean mouseClicked(double d, double e, int i) {
                 if (i == 0) {
                     this.select();
