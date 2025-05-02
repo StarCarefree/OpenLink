@@ -241,6 +241,7 @@ public class SettingScreen extends Screen {
         if(((IScreenAccessor)this).getRenderables()!=null) ((IScreenAccessor)this).getRenderables().forEach(widget -> widget.render(guiGraphics,i,j,f));
     }
 
+    String avatarSha256 = null;
     private void onTab() {
         boolean first=lasttab!=tab;
         switch(tab){
@@ -298,6 +299,12 @@ public class SettingScreen extends Screen {
                     renderableTabWidgets=tabLogin_User;
                     return;
                 }
+                if(avatarSha256 != null){
+                    ImageWidget widget = ((ImageWidget)tabUser.get(0));
+                    widget.texture=new WebTextureResourceLocation(Uris.weavatarUri.toString()+avatarSha256+".png?s=400").location;
+                    tabUser.set(0, widget);
+                    avatarSha256 = null;
+                }
                 if(first) {
                     ImageWidget nowavatar=(ImageWidget)tabUser.get(0);
                     ComponentWidget nowuser=(ComponentWidget)tabUser.get(1);
@@ -332,7 +339,8 @@ public class SettingScreen extends Screen {
                         StringBuilder sha256=new StringBuilder();
                         for (byte b:messageDigest.digest(userInfo.data.email.toLowerCase().getBytes(StandardCharsets.UTF_8)))
                             sha256.append(String.format("%02x",b));
-                        nowavatar.texture=new WebTextureResourceLocation(Uris.weavatarUri.toString()+ sha256+".png?s=400").location;
+                        avatarSha256 = sha256.toString();
+//                        nowavatar.texture=new WebTextureResourceLocation(Uris.weavatarUri.toString()+ sha256+".png?s=400").location;
                         nowuser.setMessage(Utils.literalText(userInfo.data.username));
                         nowid.setMessage(Utils.literalText("#"+userInfo.data.id));
                         nowid.setX(10+nowuser.font.width(nowuser.getMessage())+1);

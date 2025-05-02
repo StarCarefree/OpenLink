@@ -16,11 +16,11 @@ public class Utils {
     }
     public static Component proxyRestartText() {
         return ComponentUtils.wrapInSquareBrackets(translatableText("text.openlink.clicktorestart"))
-                .withStyle((style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/proxyrestart"))));
+                .withStyle((style -> style.withClickEvent(new ClickEvent.RunCommand("/proxyrestart"))));
     }
     public static Component proxyStartText(String connectAddress){
-        return translatableText("text.openlink.frpcstartsuccessfully","§n"+(SettingScreen.sensitiveInfoHiding?"§k":"")+connectAddress).withStyle((style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, connectAddress))
-                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, literalText((SettingScreen.sensitiveInfoHiding?"§k":"")+connectAddress)))));
+        return translatableText("text.openlink.frpcstartsuccessfully","§n"+(SettingScreen.sensitiveInfoHiding?"§k":"")+connectAddress).withStyle((style -> style.withClickEvent(new ClickEvent.CopyToClipboard(connectAddress))
+                        .withHoverEvent(new HoverEvent.ShowText(literalText((SettingScreen.sensitiveInfoHiding?"§k":"")+connectAddress)))));
     }
     public static ResourceLocation createResourceLocation(String namespace, String path) {
         return ResourceLocation.fromNamespaceAndPath(namespace,path);

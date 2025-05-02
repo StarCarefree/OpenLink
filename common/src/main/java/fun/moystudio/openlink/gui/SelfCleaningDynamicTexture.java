@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.texture.DynamicTexture;
 
 public class SelfCleaningDynamicTexture extends DynamicTexture {
     public SelfCleaningDynamicTexture(NativeImage nativeImage) {
-        super(nativeImage);
+        super(() -> "openlink:avatar.png", nativeImage);
     }
 
     @Override
