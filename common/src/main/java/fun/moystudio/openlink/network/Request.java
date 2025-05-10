@@ -7,6 +7,7 @@ import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
@@ -35,7 +36,7 @@ public class Request {
 
     public static Pair<String,Map<String, List<String>>> POST(String url, Map<String,List<String>> header, String body, boolean _skip) throws Exception {
         URL postUrl=new URL(url);
-        HttpsURLConnection connection=(HttpsURLConnection) postUrl.openConnection();
+        HttpURLConnection connection=(HttpURLConnection) postUrl.openConnection();
         connection.setRequestMethod("POST");
         if(!_skip) {
             header.forEach(((s, strings) -> strings.forEach(s1 -> connection.addRequestProperty(s, s1))));
@@ -71,7 +72,7 @@ public class Request {
 
     public static Pair<String,Map<String, List<String>>> GET(String url, Map<String,List<String>> header) throws Exception{
         URL postUrl=new URL(url);
-        HttpsURLConnection connection=(HttpsURLConnection) postUrl.openConnection();
+        HttpURLConnection connection=(HttpURLConnection) postUrl.openConnection();
         connection.setRequestMethod("GET");
         header.forEach(((s, strings) -> strings.forEach(s1 -> connection.addRequestProperty(s,s1))));
         try(BufferedReader br=new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))){

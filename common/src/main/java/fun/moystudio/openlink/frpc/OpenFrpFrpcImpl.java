@@ -296,7 +296,7 @@ public class OpenFrpFrpcImpl implements Frpc{
             result = true;
         } else {
             getFrpcVersion(path);
-            if(!frpcVersion.equals(latestVersion)){
+            if(frpcVersion==null||!frpcVersion.equals(latestVersion)){
                 LOGGER.info("A frpc update was found! Latest version:{} Old version:{}", latestVersion, frpcVersion);
                 result = true;
             }
