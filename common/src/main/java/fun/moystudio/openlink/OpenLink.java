@@ -117,18 +117,19 @@ public final class OpenLink {
         Gson gson = new Gson();
         int preferClassify = -1;
         try {
-            String json = Request.POST(Uris.ipstackUri.toString(), Request.DEFAULT_HEADER, "{}").getFirst();
+            String json = Request.GET(Uris.ipstackUri.toString(), Request.DEFAULT_HEADER).getFirst();
             JsonIP jsonIP = gson.fromJson(json, JsonIP.class);
 
-            if (jsonIP.country.equals("CN")) {
+            if (jsonIP.countryCode.equals("CN")) {
                 preferClassify = 1;
-            } else if (jsonIP.country.equals("HK") || jsonIP.country.equals("TW") || jsonIP.country.equals("MO")) {
+            } else if (jsonIP.countryCode.equals("HK") || jsonIP.countryCode.equals("TW") || jsonIP.countryCode.equals("MO")) {
                 preferClassify = 2;
             } else {
                 preferClassify = 3;
             }
-            OpenLink.LOGGER.info("User Country Code: " + jsonIP.country + ", Prefer Classify: " + preferClassify);
-        } catch (Exception ignored) {
+            OpenLink.LOGGER.info("User Country Code: " + jsonIP.countryCode + ", Prefer Classify: " + preferClassify);
+        } catch (Exception e) {
+            e.printStackTrace();
             OpenLink.LOGGER.warn("Can not get user country! Ignoring...");
         }
         return preferClassify;
