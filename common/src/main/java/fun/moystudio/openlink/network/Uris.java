@@ -9,7 +9,7 @@ public class Uris {
         try {
             openidLoginUri = new URI("https://account.naids.com/");
             openFrpAPIUri = new URI("https://api.openfrp.net/");
-            ipstackUri = new URI("https://fcd09628a76b.aapq.net/ip");
+            ipstackUri = new URI("http://ip-api.com/json/");
             weavatarUri = new URI("https://weavatar.com/avatar/");
             advertiseUri = new URI("https://started.ink/");
         } catch (URISyntaxException e) {
