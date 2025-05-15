@@ -36,10 +36,6 @@ dependencies {
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionNeoForge')
-
-    implementation 'org.reflections:reflections:0.10.2'
-
-    include 'org.reflections:reflections:0.10.2'
 }
 
 processResources {
