@@ -20,9 +20,6 @@ public final class OpenLinkFabricLike {
         ScreenEvents.AFTER_INIT.register((client, screen, scaledWidth, scaledHeight)->{
             EventCallbacks.onScreenInit(client,screen);
         });
-        ServerWorldEvents.UNLOAD.register((server, world)->{
-            EventCallbacks.onLevelClear();
-        });
         ClientTickEvents.END_CLIENT_TICK.register(EventCallbacks::onClientTick);
         ClientLifecycleEvents.CLIENT_STARTED.register((Minecraft minecraft)->{
             EventCallbacks.onAllModLoadingFinish();
