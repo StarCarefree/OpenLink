@@ -46,11 +46,6 @@ public class EventCallbacks {
     public static void onClientStop(){
         FrpcManager.getInstance().stop();
     }
-    public static void onLevelClear(){
-        ConflictSelectionScreen.canOpen=null;
-        if(OpenLink.disabled) return;
-        FrpcManager.getInstance().stop();
-    }
 
     public static void onClientTick(Minecraft minecraft){
         if(minecraft.screen instanceof TitleScreen){
