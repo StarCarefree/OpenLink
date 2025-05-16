@@ -1,6 +1,5 @@
 package fun.moystudio.openlink.frpc;
 
-import com.google.common.reflect.ClassPath;
 import com.mojang.datafixers.util.Pair;
 import fun.moystudio.openlink.OpenLink;
 import fun.moystudio.openlink.logic.EventCallbacks;
@@ -12,7 +11,6 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
@@ -24,7 +22,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class FrpcManager {
     private final Map<String, Pair<String, ? extends Frpc>> frpcImplInstances = new HashMap<>();

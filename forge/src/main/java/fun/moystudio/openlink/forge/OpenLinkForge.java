@@ -15,9 +15,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.versions.forge.ForgeVersion;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Mod.EventBusSubscriber
 @Mod(OpenLink.MOD_ID)
 public final class OpenLinkForge {

@@ -188,7 +188,7 @@ public class SettingScreen extends Screen {
         if(renderableTabWidgets!=null){
             for(Renderable widget:renderableTabWidgets){
                 if (widget instanceof GuiEventListener guiEventListener) {
-                    if (!(guiEventListener instanceof AbstractButton)) continue;
+                    if (!(guiEventListener instanceof AbstractButton||guiEventListener instanceof ObjectSelectionList<?>)) continue;
                     if (guiEventListener.mouseClicked(d, e, i)) {
                         this.setFocused(guiEventListener);
                         if (i == 0) {

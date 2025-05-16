@@ -110,7 +110,7 @@ public class OpenFrpFrpcImpl implements Frpc{
         }
         list.add(String.format(Locale.getDefault(),"%tD %tT",new Date(),new Date())+","+getUserInfo().data.traffic);
         OpenLink.PREFERENCES.put("traffic_storage", String.join(";", list));
-        return new ProcessBuilder(frpcExecutableFilePath.toFile().getAbsolutePath(),"-u",token,"-p",String.valueOf(proxyId)).redirectErrorStream(true).start();
+        return new ProcessBuilder(frpcExecutableFilePath.toFile().getAbsolutePath(),"-u",token,"-p",String.valueOf(proxyId),"-n").redirectErrorStream(true).start();
     }
 
     @Override
