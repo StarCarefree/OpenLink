@@ -10,9 +10,6 @@ import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.minecraft.client.Minecraft;
 
-import java.util.List;
-import java.util.function.Supplier;
-
 public final class OpenLinkFabricLike {
     public static void init(String version, String loader, String loader_version) throws Exception {
         // Run our common setup.

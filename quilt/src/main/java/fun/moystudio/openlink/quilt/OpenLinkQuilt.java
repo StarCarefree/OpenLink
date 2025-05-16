@@ -1,15 +1,10 @@
 package fun.moystudio.openlink.quilt;
 
 import fun.moystudio.openlink.OpenLink;
+import fun.moystudio.openlink.fabriclike.OpenLinkFabricLike;
 import net.fabricmc.api.ModInitializer;
-import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.loader.api.QuiltLoader;
 import org.quiltmc.loader.impl.QuiltLoaderImpl;
-
-import fun.moystudio.openlink.fabriclike.OpenLinkFabricLike;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public final class OpenLinkQuilt implements ModInitializer {
     @Override
