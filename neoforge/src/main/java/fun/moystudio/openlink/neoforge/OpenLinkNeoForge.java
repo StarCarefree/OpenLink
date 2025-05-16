@@ -34,10 +34,6 @@ public final class OpenLinkNeoForge {
                 .executes(context -> FrpcManager.getInstance().start(Minecraft.getInstance().getSingleplayerServer().getPort(),"")?1:0));
     }
 
-    @SubscribeEvent
-    public static void onLevelClear(LevelEvent.Unload event){
-        EventCallbacks.onLevelClear();
-    }
 
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event){
