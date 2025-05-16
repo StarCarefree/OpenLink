@@ -35,11 +35,6 @@ public final class OpenLinkForge {
     }
 
     @SubscribeEvent
-    public static void onLevelClear(LevelEvent.Unload event){
-        EventCallbacks.onLevelClear();
-    }
-
-    @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event){
         EventCallbacks.onClientTick(Minecraft.getInstance());
     }
