@@ -3,7 +3,6 @@ package fun.moystudio.openlink.network;
 import com.mojang.datafixers.util.Pair;
 import fun.moystudio.openlink.frpc.OpenFrpFrpcImpl;
 
-import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
