@@ -32,6 +32,7 @@
   "text.openlink.local_port": "Порт локального сервера (опционально)",
   "text.openlink.login": "Логин",
   "text.openlink.logintips": "Пожалуйста, войдите в свою учетную запись Natayark",
+  "text.openlink.logintips_sakura": "Пожалуйста, авторизуйте ваш SakuraFrp аккаунт",
   "text.openlink.logout": "Выйти",
   "text.openlink.no_account": "§o§cУ вас нет аккаунта?",
   "text.openlink.nodata": "Нет данных (ранее вы не использовали прокси сервис)",
@@ -51,6 +52,8 @@
   "text.openlink.secure": "Безопасность",
   "text.openlink.sslignored": "Из-за вашей сети, SSL игнорируется. Все ваши сетевые запросы будут НЕБЕЗОПАСНЫ! Вы до сих пор хотите использовать OpenLink?",
   "text.openlink.sslwarning": "§b§o[OpenLink] §r§3 SSL игнорирование может сделать ваш логин и пароль НЕБЕЗОПАСНЫМ. \n§c§o§lПожалуйста, не отправляйте IP подозрительным лицам!",
+  "text.openlink.token": "Введите токен доступа к логину (вы можете получить его из панели Web SakuraFrp)",
+  "text.openlink.updatebutton": "Обновить выбранный frpc",
   "text.openlink.updatefrpc": "§l§gНовая версия Frpc найдена! §r§g Последняя версия:§l§u %s §r§g, §gТекущая версия:§l§u %s §r§g. §6Вы хотели бы обновить?",
   "text.openlink.updatingfrpc": "§o§sОбновление Frpc...§8(Это может занять некоторое время)",
   "text.openlink.userproxieslimited": "§c§lДостигнуто максимальное количество прокси.\nПожалуйста, удалите некоторые прокси!",
@@ -58,6 +61,5 @@
   "text.openlink.webpanel": "%s Веб-панель",
   "text.openlink.wiki": "OpenLink Вики",
   "text.openlink.x_axis_label": "Время",
-  "text.openlink.y_axis_label": "Трафик (MiB)",
-  "text.openlink.updatebutton": "Обновить выбранный frpc"
+  "text.openlink.y_axis_label": "Трафик (MiB)"
 }
