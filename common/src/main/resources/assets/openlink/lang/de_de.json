@@ -32,6 +32,7 @@
   "text.openlink.local_port": "Einheimisch Port(fakultativ)",
   "text.openlink.login": "Einloggen",
   "text.openlink.logintips": "Einloggen zu deinen Natayark Konto bitte",
+  "text.openlink.logintips_sakura": "Einloggen zu deinen SakuraFrp Konto bitte",
   "text.openlink.logout": "Ausloggen",
   "text.openlink.no_account": "§o§c Haben Sie ein Konto nicht?",
   "text.openlink.nodata": "Keine daten(Sie hat nicht dem frp dienen wurd)",
@@ -51,6 +52,8 @@
   "text.openlink.secure": "Sicherheit",
   "text.openlink.sslignored": "Zumal deine Netzwerke, SSL hat weggelassen. Deine alles Netzwerk-Anfragen wird UNSICHERHEIT machen! Fortsetzend wenden Sie OpenLink an?",
   "text.openlink.sslwarning": "§b§o[OpenLink] §r§3 weglassen das SSL wird dein Konto und deine Geheimschrift UNSICHERHEIT machen.\n§c§o§l teilen sie nicht das IP zu irgendeiner Skepsis bitte!",
+  "text.openlink.token": "Eintippen Sie das Token zu einloggen(Sie kann das von SakuraFrp Panel erhalten)",
+  "text.openlink.updatebutton": "Erneuern der selektiert frpc",
   "text.openlink.updatefrpc": "§l§gEin neuer frpc Kern hat gefunden wurd! §bMöchteen Sie erneuern?",
   "text.openlink.updatingfrpc": "§o§6 aufrücken das frpc... §s(das möglich brauchen Minuten)",
   "text.openlink.userproxieslimited": "§c§l Sie hat übersteigend Tunnels gegründet.\nWegstreichen Sie einige Tunnel bitte!",
@@ -58,6 +61,5 @@
   "text.openlink.webpanel": "%s Netz Panel",
   "text.openlink.wiki": "OpenLink Netz Wiki",
   "text.openlink.x_axis_label": "Zeit",
-  "text.openlink.y_axis_label": "Durchflussmenge(MiB)",
-  "text.openlink.updatebutton": "Erneuern der selektiert frpc"
+  "text.openlink.y_axis_label": "Durchflussmenge(MiB)"
 }
