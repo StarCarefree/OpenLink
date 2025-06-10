@@ -54,7 +54,7 @@
   "text.openlink.sslwarning": "§b§o[OpenLink] §r§3 忽略 SSL 可能会使您的内穿账号和密码不安全. \n§c§o§l请不要将 IP 发送给任何您不信任的人！",
   "text.openlink.token": "输入访问密钥(您可以在 SakuraFrp 面板获取)",
   "text.openlink.updatebutton": "更新选中的frpc",
-  "text.openlink.updatefrpc": "§l§g一个新的frpc版本被发现！§b你想要更新吗？",
+  "text.openlink.updatefrpc": "§l§g发现了一个新版本的frpc！§b你想要更新吗？",
   "text.openlink.updatingfrpc": "§o§s正在更新Frpc核心...§8(这可能会耗费少许时间)",
   "text.openlink.userproxieslimited": "§c§l您的OpenFrp账户已创建的隧道数达到允许的最大数目。\n请删除一个隧道后再次尝试！",
   "text.openlink.usingfrp": "使用内网穿透",
