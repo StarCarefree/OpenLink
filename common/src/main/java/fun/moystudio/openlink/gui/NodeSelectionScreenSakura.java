@@ -1,6 +1,5 @@
 package fun.moystudio.openlink.gui;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import fun.moystudio.openlink.frpcimpl.SakuraFrpFrpcImpl;
 import fun.moystudio.openlink.json.*;
@@ -105,8 +104,8 @@ public class NodeSelectionScreenSakura extends Screen {
         public JsonUserInfoSakura userInfo = null;
 
         public void changePos(int width, int height, int y0, int y1){
-            this.setSize(width,y1-y0);
             this.setY(y0);
+            this.setSize(width, y1 - y0);
         }
 
         @Override
