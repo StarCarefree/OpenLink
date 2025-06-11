@@ -2,7 +2,7 @@ package fun.moystudio.openlink.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import fun.moystudio.openlink.OpenLink;
-import fun.moystudio.openlink.frpc.FrpcManager;
+import fun.moystudio.openlink.frpcimpl.FrpcManager;
 import fun.moystudio.openlink.logic.EventCallbacks;
 import fun.moystudio.openlink.logic.Utils;
 import net.minecraft.Util;

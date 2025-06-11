@@ -18,6 +18,7 @@ public interface Frpc {
      * If you really want to override the download logic, implement this method and return {@code true}.<br>
      * If you just want to do something before the frpc downloading, implement this method and return {@code false}
      * @param frpcDownloadDir the download directory of the frpc executable file.
+     * @return whether this method override frpc downloading.
      * @implNote If you return {@code true} in this method, you have to download frpc to {@code frpcDownloadDir} and make sure there is a frpc executable file if you do not implement {@link #frpcDirPathOverride(Path)}(OpenLink will scan the directory to find an executable file).
      */
     default boolean downloadFrpc(Path frpcDownloadDir) {
@@ -49,6 +50,7 @@ public interface Frpc {
     }
     /**
      * Initialize your Frpc Impl
+     * @throws Exception All exceptions that can throw when initiating.
      */
     default void init() throws Exception{
     }
@@ -63,6 +65,7 @@ public interface Frpc {
      */
     String name();
     /**
+     * Get whether there is a frpc update.
      * @return whether there is a frpc update.
      * @param frpcExecutableFilePath the path of the frpc executable file.
      */
@@ -73,6 +76,7 @@ public interface Frpc {
      * @param localPort the lan server port.
      * @param remotePort the remote port user decided to use(maybe {@code null} or blank).
      * @return the frpc process.
+     * @throws Exception All exceptions that can throw when creating frpc process.
      */
     Process createFrpcProcess(Path frpcExecutableFilePath, int localPort, @Nullable String remotePort) throws Exception;
     /**
@@ -80,6 +84,7 @@ public interface Frpc {
      * @param localPort the lan server port.
      * @param remotePort the remote port user decided to use(maybe {@code null} or blank).
      * @return the remote ip of the remote proxy for players to join.
+     * @throws Exception All exceptions that can throw when creating proxy.
      * @implNote You can ignore {@code remotePort} when you cannot use that port to create the remote proxy. You should only create the frpc tunnel in this method. DO NOT START FRPC IN THIS METHOD!
      */
     String createProxy(int localPort, @Nullable String remotePort) throws Exception;

@@ -5,21 +5,22 @@ import fun.moystudio.openlink.OpenLink;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 
-import javax.net.ssl.HttpsURLConnection;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class WebTextureResourceLocation {
     public String url;
     public ResourceLocation location;
-    public WebTextureResourceLocation(String url){
+    public WebTextureResourceLocation(String url, ResourceLocation def){
         this.url=url;
+        this.location=def;
         this.load();
     }
     public void load(){
         try{
             URL url1=new URL(url);
-            HttpsURLConnection connection=(HttpsURLConnection) url1.openConnection();
+            HttpURLConnection connection= (HttpURLConnection) url1.openConnection();
             InputStream stream=connection.getInputStream();
             NativeImage image=NativeImage.read(stream);
             location=Minecraft.getInstance().getTextureManager().register("avatar",new SelfCleaningDynamicTexture(image));

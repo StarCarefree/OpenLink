@@ -2,7 +2,8 @@ package fun.moystudio.openlink.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import fun.moystudio.openlink.OpenLink;
-import fun.moystudio.openlink.frpc.FrpcManager;
+import fun.moystudio.openlink.frpcimpl.FrpcManager;
+import fun.moystudio.openlink.logic.EventCallbacks;
 import fun.moystudio.openlink.logic.Utils;
 import net.minecraft.Util;
 import net.minecraft.client.gui.components.Button;
@@ -31,7 +32,13 @@ public class UpdateScreen extends Screen {
         List<Component> list = new ArrayList<>();
         strings.forEach((String)-> list.add(Utils.literalText(String)));
         yes=new Button(this.width/4-40,this.height/5*4-10,80,20,CommonComponents.GUI_YES,button -> this.minecraft.setScreen(new UpdatingScreen()));
-        no=new Button(this.width/4*3-40,this.height/5*4-10,80,20,CommonComponents.GUI_NO,button -> {if(!FrpcManager.getInstance().isExecutableFileExist(FrpcManager.getInstance().getCurrentFrpcId()))OpenLink.disabled=true;this.onClose();}, (button, poseStack, i, j) -> {
+        no=new Button(this.width/4*3-40,this.height/5*4-10,80,20,CommonComponents.GUI_NO,button -> {
+            if(!FrpcManager.getInstance().isExecutableFileExist(FrpcManager.getInstance().getCurrentFrpcId())){
+                OpenLink.disabled=true;
+            }
+            EventCallbacks.hasUpdate=false;
+            this.onClose();
+        }, (button, poseStack, i, j) -> {
             if(!FrpcManager.getInstance().isExecutableFileExist(FrpcManager.getInstance().getCurrentFrpcId())){
                 renderComponentTooltip(poseStack, list, i, j);
             }

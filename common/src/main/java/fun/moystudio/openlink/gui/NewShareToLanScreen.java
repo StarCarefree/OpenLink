@@ -2,7 +2,7 @@ package fun.moystudio.openlink.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import fun.moystudio.openlink.OpenLink;
-import fun.moystudio.openlink.frpc.FrpcManager;
+import fun.moystudio.openlink.frpcimpl.FrpcManager;
 import fun.moystudio.openlink.logic.LanConfig;
 import fun.moystudio.openlink.logic.OnlineModeTabs;
 import fun.moystudio.openlink.logic.UUIDFixer;
@@ -165,7 +165,7 @@ public class NewShareToLanScreen extends Screen {
             }
         })));
         this.addButton(new Button(this.width / 2 + 5, this.height - 28, 150, 20, CommonComponents.GUI_CANCEL, (button) -> this.minecraft.setScreen(this.lastScreen)));
-        editBox2=new EditBox(this.font,this.width/2-(OpenLink.disabled||!LanConfig.cfg.use_frp?75:155),OpenLink.disabled?160:190,150,20,Utils.translatableText("text.openlink.local_port"));
+        editBox2=new EditBox(this.font,this.width/2-(OpenLink.disabled||!LanConfig.cfg.use_frp?75:155),OpenLink.disabled?160:190,150,20,editBox2,Utils.translatableText("text.openlink.local_port"));
         editBox2.setSuggestion(Utils.translatableText("text.openlink.local_port").getString());
         this.addButton(editBox2);
         onlinemode=CycleButton.builder((OnlineModeTabs o)-> o.component)
@@ -176,7 +176,7 @@ public class NewShareToLanScreen extends Screen {
         this.addButton(onlinemode);
         this.addButton(allowpvp);
         if(OpenLink.disabled) return;
-        editBox=new EditBox(this.font,this.width / 2 + 5, 190, 150, 20, Utils.translatableText("text.openlink.remote_port"));
+        editBox=new EditBox(this.font,this.width / 2 + 5, 190, 150, 20, editBox, Utils.translatableText("text.openlink.remote_port"));
         editBox.setSuggestion(Utils.translatableText("text.openlink.remote_port").getString());
         editBox.setValue(LanConfig.cfg.last_port_value);
         this.addButton(editBox);

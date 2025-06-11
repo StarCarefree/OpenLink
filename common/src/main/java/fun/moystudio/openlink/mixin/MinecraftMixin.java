@@ -14,9 +14,4 @@ public abstract class MinecraftMixin {
     public void openLink$stopEvent(CallbackInfo ci){
         EventCallbacks.onClientStop();
     }
-    @Inject(method = "allowsMultiplayer",at = @At("RETURN"), cancellable = true)
-    public void openLink$allowsMultiplayer(CallbackInfoReturnable<Boolean> cir){
-        cir.setReturnValue(true);
-        cir.cancel();
-    }
 }

@@ -21,6 +21,9 @@ subprojects {
     base {
         // Set up a suffixed format for the mod jar names, e.g. `example-fabric`.
         archivesName = "$rootProject.archives_name-$project.name-$rootProject.minecraft_version"
+        if(project.name == "frpc") {
+            archivesName = "$rootProject.archives_name-$project.name"
+        }
     }
 
     repositories {
@@ -69,6 +72,19 @@ subprojects {
             // Notice: This block does NOT have the same function as the block in the top level.
             // The repositories here will be used for publishing your artifact, not for
             // retrieving dependencies.
+        }
+    }
+}
+
+subprojects {
+    if(project.path == ":forge" || project.path == ":neoforge") {//stupid forge family
+        loom {
+            mods {
+                main {
+                    sourceSet project.sourceSets.main
+                    sourceSet project(":frpc").sourceSets.main
+                }
+            }
         }
     }
 }

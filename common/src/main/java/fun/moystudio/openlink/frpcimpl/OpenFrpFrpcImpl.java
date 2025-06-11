@@ -1,9 +1,10 @@
-package fun.moystudio.openlink.frpc;
+package fun.moystudio.openlink.frpcimpl;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.mojang.datafixers.util.Pair;
 import fun.moystudio.openlink.OpenLink;
+import fun.moystudio.openlink.frpc.Frpc;
 import fun.moystudio.openlink.gui.LoginScreen;
 import fun.moystudio.openlink.gui.NodeSelectionScreen;
 import fun.moystudio.openlink.json.*;
@@ -24,7 +25,6 @@ import java.nio.file.Path;
 import java.util.*;
 
 public class OpenFrpFrpcImpl implements Frpc{
-    private static OpenFrpFrpcImpl INSTANCE = null;
     private String frpcVersion = null, latestVersion = null, latestFolderName = "OF_0.61.1_4df06100_250122/";
     private String osArch,osName, archiveSuffix;
     private long proxyId;
@@ -82,16 +82,9 @@ public class OpenFrpFrpcImpl implements Frpc{
         return true;
     }
 
-    Path lastFrpcExecutablePath = null;
-
     @Override
     public boolean isOutdated(Path frpcExecutablePath) {
         return checkUpdate(frpcExecutablePath);
-    }
-
-    @Override
-    public boolean downloadFrpc(Path downloadDir) {
-        return false;
     }
 
     @Override
@@ -110,7 +103,7 @@ public class OpenFrpFrpcImpl implements Frpc{
         }
         list.add(String.format(Locale.getDefault(),"%tD %tT",new Date(),new Date())+","+getUserInfo().data.traffic);
         OpenLink.PREFERENCES.put("traffic_storage", String.join(";", list));
-        return new ProcessBuilder(frpcExecutableFilePath.toFile().getAbsolutePath(),"-u",token,"-p",String.valueOf(proxyId),"-n").redirectErrorStream(true).start();
+        return new ProcessBuilder(frpcExecutableFilePath.toFile().getAbsolutePath(),"-u",token,"-p",String.valueOf(proxyId),"-n","--disable_log_color").redirectErrorStream(true).start();
     }
 
     @Override
@@ -154,22 +147,24 @@ public class OpenFrpFrpcImpl implements Frpc{
             LOGGER.info("Selecting node...");
             List<JsonNode> canUseNodes=new ArrayList<>();
             for(JsonNode now:nodelist.data.list){
-                int groupnumber1=5,usergroupnumber;
+                int groupnumber1=0,usergroupnumber=0;
                 if(now.group.contains("svip")){
                     groupnumber1=3;
                 }
-                if(now.group.contains("vip")){
+                else if(now.group.contains("vip")){
                     groupnumber1=2;
                 }
-                if(now.group.contains("normal")){
+                else if(now.group.contains("normal")){
                     groupnumber1=1;
                 }
                 if(userinfo.data.group.contains("svip")){
                     usergroupnumber=3;
                 }else if(userinfo.data.group.contains("vip")){
                     usergroupnumber=2;
-                }else{
+                }else if(now.group.contains("normal")){
                     usergroupnumber=1;
+                }else if(now.group.contains("dev")){
+                    usergroupnumber=5;
                 }
                 if(groupnumber1>usergroupnumber||!now.protocolSupport.tcp||now.status!=200||now.fullyLoaded||(now.needRealname&&!userinfo.data.realname)){
                     continue;
@@ -183,29 +178,31 @@ public class OpenFrpFrpcImpl implements Frpc{
                 if(OpenLink.PREFER_CLASSIFY!=-1&&o1.classify!=o2.classify&&(o1.classify== OpenLink.PREFER_CLASSIFY)!=(o2.classify==OpenLink.PREFER_CLASSIFY))
                     return o1.classify==OpenLink.PREFER_CLASSIFY?-1:1;
                 if(!o1.group.equals(o2.group)){
-                    int first=5,second=5;
+                    int first=0,second=0;
                     if(o1.group.contains("svip")){
                         first=3;
                     }
-                    if(o1.group.contains("vip")){
+                    else if(o1.group.contains("vip")){
                         first=2;
                     }
-                    if(o1.group.contains("normal")){
+                    else if(o1.group.contains("normal")){
                         first=1;
                     }
                     if(o2.group.contains("svip")){
                         second=3;
                     }
-                    if(o2.group.contains("vip")) {
+                    else if(o2.group.contains("vip")) {
                         second=2;
                     }
-                    if(o2.group.contains("normal")){
+                    else if(o2.group.contains("normal")){
                         second=1;
                     }
-                    return first>second?-1:1;
+                    if(first != second){
+                        return first>second?-1:1;
+                    }
                 }
-                if(Math.abs(o1.bandwidth*o1.bandwidthMagnification-o2.bandwidth*o2.bandwidthMagnification)<1e-5)
-                    return o2.bandwidth*o2.bandwidthMagnification>o1.bandwidth*o1.bandwidthMagnification?1:-1;
+                if(Math.abs(o1.bandwidth*o1.bandwidthMagnification-o2.bandwidth*o2.bandwidthMagnification)>1e-5)
+                    return Double.compare(o2.bandwidth*o2.bandwidthMagnification,o1.bandwidth*o1.bandwidthMagnification);
                 if(userinfo.data.realname&&o1.needRealname!=o2.needRealname)
                     return o1.needRealname?-1:1;
                 return 0;
@@ -240,7 +237,7 @@ public class OpenFrpFrpcImpl implements Frpc{
                 break;
             }
         }//创建隧道
-        if(!found) throw new Exception(Utils.translatableText("text.openlink.remoteportnotfound").getString());
+        if(!found) throw new Exception(Utils.translatableText("text.openlink.remoteportnotfound").getString() + "last msg:" +gson.fromJson(response.getFirst(), JsonResponseWithData.class).msg);
         LanConfig.cfg.last_port_value=String.valueOf(newProxy.remote_port).equals(remotePort)?remotePort:"";
         response=Request.POST(Uris.openFrpAPIUri+"frp/api/getUserProxies",Request.getHeaderWithAuthorization(Request.DEFAULT_HEADER, OpenFrpFrpcImpl.Authorization),"{}");
         userProxies = gson.fromJson(response.getFirst(), new TypeToken<JsonResponseWithData<JsonTotalAndList<JsonUserProxy>>>(){}.getType());
@@ -270,13 +267,6 @@ public class OpenFrpFrpcImpl implements Frpc{
     public void logOut() {
         Authorization = null;
         writeSession();
-    }
-
-    public static Frpc getInstance(){
-        if(INSTANCE == null){
-            INSTANCE = new OpenFrpFrpcImpl();
-        }
-        return INSTANCE;
     }
 
     private boolean checkUpdate(Path path) {

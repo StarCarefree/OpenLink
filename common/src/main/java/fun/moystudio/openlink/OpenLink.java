@@ -59,6 +59,7 @@ public final class OpenLink {
 
         //Settings Reading
         SettingScreen.sensitiveInfoHiding=PREFERENCES.getBoolean("setting_sensitive_info_hiding", false);
+        SettingScreen.unavailableNodeHiding=PREFERENCES.getBoolean("setting_unavailable_node_hiding", true);
         PREFERENCES.putBoolean("setting_sensitive_info_hiding", SettingScreen.sensitiveInfoHiding);
 
         //Conflict Class Name Detecting

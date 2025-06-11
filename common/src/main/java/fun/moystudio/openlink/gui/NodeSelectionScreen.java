@@ -1,8 +1,10 @@
 package fun.moystudio.openlink.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import fun.moystudio.openlink.frpc.OpenFrpFrpcImpl;
+import fun.moystudio.openlink.frpcimpl.OpenFrpFrpcImpl;
 import fun.moystudio.openlink.json.JsonNode;
+import fun.moystudio.openlink.json.JsonResponseWithData;
+import fun.moystudio.openlink.json.JsonUserInfo;
 import fun.moystudio.openlink.logic.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
@@ -50,6 +52,9 @@ public class NodeSelectionScreen extends Screen {
         this.renderBackground(poseStack);
         if(selectionList!=null){
             selectionList.render(poseStack,i,j,f);
+            if(selectionList.userInfo!=null&&selectionList.userInfo.data!=null&&!selectionList.userInfo.data.realname) {
+                drawString(poseStack,this.minecraft.font, Utils.translatableText("text.openlink.realnametounlock"),0,this.height-this.minecraft.font.lineHeight, 0xffffff);
+            }
         }
         drawCenteredString(poseStack,this.font,this.title,this.width/2,16,0xffffff);
         done.render(poseStack,i,j,f);
@@ -70,7 +75,18 @@ public class NodeSelectionScreen extends Screen {
                 List<JsonNode> nodes;
                 try {
                     nodes=OpenFrpFrpcImpl.getNodeList().data.list;
+                    userInfo = OpenFrpFrpcImpl.getUserInfo();
                     for(JsonNode node:nodes){
+                        if(SettingScreen.unavailableNodeHiding && userInfo!=null && userInfo.data!=null){
+                            if(
+                                node.fullyLoaded||
+                                (node.needRealname&&!userInfo.data.realname)||
+                                (!node.group.contains(userInfo.data.group))||
+                                node.status!=200
+                            ){
+                                continue;
+                            }
+                        }
                         Entry entry1=new Entry(node);
                         this.addEntry(entry1);
                         if(node.id==OpenFrpFrpcImpl.nodeId){
@@ -78,7 +94,6 @@ public class NodeSelectionScreen extends Screen {
                             this.centerScrollOn(entry1);
                         }
                     }
-
                 } catch (Exception e) {
                     e.printStackTrace();
                     this.minecraft.setScreen(lastscreen);
@@ -89,6 +104,8 @@ public class NodeSelectionScreen extends Screen {
                 this.centerScrollOn(this.getSelected());
             }
         }
+
+        public JsonResponseWithData<JsonUserInfo> userInfo = null;
 
         public void changePos(int width, int height, int y0, int y1){
             this.width=width;
