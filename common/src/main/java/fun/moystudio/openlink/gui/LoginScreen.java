@@ -2,8 +2,8 @@ package fun.moystudio.openlink.gui;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import fun.moystudio.openlink.frpc.FrpcManager;
-import fun.moystudio.openlink.frpc.OpenFrpFrpcImpl;
+import fun.moystudio.openlink.frpcimpl.FrpcManager;
+import fun.moystudio.openlink.frpcimpl.OpenFrpFrpcImpl;
 import fun.moystudio.openlink.json.JsonResponseWithData;
 import fun.moystudio.openlink.json.JsonUserInfo;
 import fun.moystudio.openlink.logic.Utils;
@@ -56,6 +56,7 @@ public class LoginScreen extends Screen {
             try {
                 JsonResponseWithData<JsonUserInfo> response = OpenFrpFrpcImpl.getUserInfo();
                 if(response!=null&&response.flag){
+                    OpenFrpFrpcImpl.writeSession();
                     this.onClose();
                 } else {
                     OpenFrpFrpcImpl.Authorization = null;

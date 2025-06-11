@@ -1,7 +1,7 @@
 package fun.moystudio.openlink.gui;
 
 import fun.moystudio.openlink.OpenLink;
-import fun.moystudio.openlink.frpc.FrpcManager;
+import fun.moystudio.openlink.frpcimpl.FrpcManager;
 import fun.moystudio.openlink.logic.LanConfig;
 import fun.moystudio.openlink.logic.OnlineModeTabs;
 import fun.moystudio.openlink.logic.UUIDFixer;
@@ -18,7 +18,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.HttpUtil;
 import net.minecraft.world.level.GameType;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class NewShareToLanScreen extends Screen {
     private static final Component ALLOW_COMMANDS_LABEL = Utils.translatableText("selectWorld.allowCommands");
@@ -165,7 +167,7 @@ public class NewShareToLanScreen extends Screen {
         this.addRenderableWidget(onlinemode);
         this.addRenderableWidget(allowpvp);
         if(OpenLink.disabled) return;
-        editBox=new EditBox(this.font,this.width / 2 + 5, 190, 150, 20, Utils.translatableText("text.openlink.remote_port"));
+        editBox=new EditBox(this.font,this.width / 2 + 5, 190, 150, 20, editBox, Utils.translatableText("text.openlink.remote_port"));
         editBox.setSuggestion(Utils.translatableText("text.openlink.remote_port").getString());
         editBox.setValue(LanConfig.cfg.last_port_value);
         this.addRenderableWidget(editBox);
@@ -192,7 +194,8 @@ public class NewShareToLanScreen extends Screen {
 
     private Tooltip getToolTip(){
         if(OpenLink.disabled) return Tooltip.create(Utils.emptyText());
-        if(!FrpcManager.getInstance().getCurrentFrpcInstance().isLoggedIn()) return Tooltip.create(Utils.translatableText("text.openlink.lanlogintips"));
+        if(!FrpcManager.getInstance().getCurrentFrpcInstance().isLoggedIn())
+            Tooltip.create(Utils.translatableText("text.openlink.lanlogintips"));
         return Tooltip.create(Utils.emptyText());
     }
 }

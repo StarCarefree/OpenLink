@@ -1,1 +1,2 @@
-fun.moystudio.openlink.frpc.OpenFrpFrpcImpl
+fun.moystudio.openlink.frpcimpl.OpenFrpFrpcImpl
+fun.moystudio.openlink.frpcimpl.SakuraFrpFrpcImpl

@@ -1,16 +1,20 @@
-package fun.moystudio.openlink.frpc;
+package fun.moystudio.openlink.frpcimpl;
 
 import com.mojang.datafixers.util.Pair;
 import fun.moystudio.openlink.OpenLink;
+import fun.moystudio.openlink.frpc.Frpc;
 import fun.moystudio.openlink.logic.EventCallbacks;
 import fun.moystudio.openlink.logic.Extract;
 import fun.moystudio.openlink.logic.Utils;
+import fun.moystudio.openlink.network.SSLUtils;
 import net.minecraft.client.Minecraft;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
+import javax.net.ssl.SSLHandshakeException;
 import java.io.*;
+import java.net.SocketException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
@@ -22,6 +26,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FrpcManager {
     private final Map<String, Pair<String, ? extends Frpc>> frpcImplInstances = new HashMap<>();
@@ -30,7 +36,9 @@ public class FrpcManager {
     private Process frpcProcess = null;
     private final static Logger LOGGER = LogManager.getLogger("OpenLink/FrpcManager");
     private static FrpcManager INSTANCE = null;
+    private String currentIP = null;
     public boolean initialized = false;
+
     public static FrpcManager getInstance() {
         if(INSTANCE == null) {
             INSTANCE = new FrpcManager();
@@ -41,16 +49,43 @@ public class FrpcManager {
     public void init() {
         this.currentFrpcId = OpenLink.PREFERENCES.get("frpc_id", "openfrp");
         ServiceLoader<Frpc> loader = ServiceLoader.load(Frpc.class);
-        loader.forEach(instance -> {
+        for(Frpc instance:loader) {
+            try {
+                instance.init();
+            } catch (SSLHandshakeException e) {
+                e.printStackTrace();
+                OpenLink.LOGGER.error("SSL Handshake Error! Ignoring SSL(Not Secure)");
+                try {
+                    SSLUtils.ignoreSsl();
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            } catch (SocketException e){
+                e.printStackTrace();
+                OpenLink.disabled = true;
+                OpenLink.LOGGER.error("Socket Error! Are you still connecting to the network? All the features will be disabled!");
+            } catch (IOException e) {
+                e.printStackTrace();
+                OpenLink.disabled = true;
+                OpenLink.LOGGER.error("IO Error! Are you still connecting to the network? All the features will be disabled!");
+            } catch (Exception e) {
+                e.printStackTrace();
+                LOGGER.error("Cannot load {}: cannot initialize this frpc implementation.", instance.id());
+                continue;
+            }
             this.frpcImplInstances.put(instance.id(), Pair.of(instance.name(),instance));
-        });
+        }
         for (String id : this.frpcImplInstances.keySet()) {
             Path path = this.getFrpcExecutableFileByDirectory(this.getFrpcStoragePathById(id));
             if(path!=null){
                 frpcExecutableFiles.put(id, path);
             }
         }
-        StringBuilder sb = new StringBuilder("Loading " + this.frpcImplInstances.size() + " FrpcImpls:");
+        if(!this.frpcImplInstances.containsKey(currentFrpcId)){
+            LOGGER.error("Cannot load frpc id from user preferences: cannot find {}",currentFrpcId);
+            currentFrpcId = "openfrp";
+        }
+        StringBuilder sb = new StringBuilder("Loaded " + this.frpcImplInstances.size() + " FrpcImpls:");
         for (Map.Entry<String, Pair<String, ? extends Frpc>> pair : this.frpcImplInstances.entrySet()) {
             sb.append(String.format("\n\t- %s %s",pair.getKey(),pair.getValue().getSecond()));
         }
@@ -62,7 +97,7 @@ public class FrpcManager {
         return isExecutableFileExist(id)?frpcExecutableFiles.get(id):null;
     }
 
-    public String getCurrentFrpcId() {//TODO: use this method to create a screen
+    public String getCurrentFrpcId() {
         return this.currentFrpcId;
     }
 
@@ -70,17 +105,12 @@ public class FrpcManager {
         return this.frpcImplInstances.get(currentFrpcId).getSecond();
     }
 
-    public String getCurrentFrpcName() {//TODO: use this method to create a screen
+    public String getCurrentFrpcName() {
         return this.frpcImplInstances.get(currentFrpcId).getFirst();
     }
 
-    public void setCurrentFrpcId(String id) {//TODO: use this method to create a screen
+    public void setCurrentFrpcId(String id) {
         if(this.frpcImplInstances.containsKey(id)){
-            try {
-                this.frpcImplInstances.get(id).getSecond().init();
-            } catch (Exception e) {
-                LOGGER.error("Cannot set the current frpc id to {}: cannot initialize this frpc implementation.", id);
-            }
             this.currentFrpcId = id;
             OpenLink.PREFERENCES.put("frpc_id",id);
             EventCallbacks.hasUpdate = getFrpcImplDetail(getCurrentFrpcId()).getSecond().getSecond();
@@ -89,7 +119,7 @@ public class FrpcManager {
         }
     }
 
-    public List<Pair<Pair<String, String>, Pair<String,Boolean>>> getFrpcImplDetailList() {//TODO: use this method to create a screen
+    public List<Pair<Pair<String, String>, Pair<String,Boolean>>> getFrpcImplDetailList() {
         List<Pair<Pair<String, String>, Pair<String,Boolean>>> list = new ArrayList<>();
         this.frpcImplInstances.forEach((id, nameAndInstance) -> {
             list.add(Pair.of(Pair.of(id, nameAndInstance.getFirst()), Pair.of(frpcExecutableFiles.containsKey(id)?nameAndInstance.getSecond().getFrpcVersion(frpcExecutableFiles.get(id)):null, nameAndInstance.getSecond().isOutdated(this.getFrpcImplExecutableFile(id)))));
@@ -102,7 +132,7 @@ public class FrpcManager {
         return Pair.of(nameAndInstance.getFirst(), Pair.of(frpcExecutableFiles.containsKey(id)?nameAndInstance.getSecond().getFrpcVersion(frpcExecutableFiles.get(id)):null, nameAndInstance.getSecond().isOutdated(this.getFrpcImplExecutableFile(id))));
     }
 
-    public void updateFrpcByIds(String... ids) {//TODO: use this method to create a screen
+    public void updateFrpcByIds(String... ids) {
         for (String id : ids) {
             if(frpcImplInstances.containsKey(id)) {
                 Frpc instance = this.frpcImplInstances.get(id).getSecond();
@@ -151,6 +181,7 @@ public class FrpcManager {
                     break;
                 } catch (Exception e){
                     e.printStackTrace();
+                    LOGGER.info("An error occurred while downloading frpc by url '{}'",s);
                 }
             }
             if(!flag) {
@@ -180,7 +211,7 @@ public class FrpcManager {
         }
     }
 
-    public Path getFrpcStoragePathById(String id) {//TODO: use this method to create a screen
+    public Path getFrpcStoragePathById(String id) {
         if(this.frpcImplInstances.containsKey(id)){
             Path override = this.frpcImplInstances.get(id).getSecond().frpcDirPathOverride(Path.of(OpenLink.EXECUTABLE_FILE_STORAGE_PATH + id));
             if(override!=null) override.toFile().mkdirs();
@@ -218,6 +249,7 @@ public class FrpcManager {
         if(!initialized) return;
         this.getCurrentFrpcInstance().stopFrpcProcess(this.frpcProcess);
         this.frpcProcess = null;
+        this.currentIP = null;
     }
 
     public boolean start(int i, String val) {
@@ -248,14 +280,7 @@ public class FrpcManager {
                             FileOutputStream fo=new FileOutputStream(logFile,true);
                             while ((line = reader.readLine()) != null) {
                                 fo.write("\n".getBytes(StandardCharsets.UTF_8));
-                                String[] parts = line.split("\u001B\\[");
-                                for(String part:parts) {
-                                    if(part.isEmpty()) {
-                                        continue;
-                                    }
-                                    String text = part.substring(part.indexOf("m") + 1);
-                                    fo.write(text.getBytes(StandardCharsets.UTF_8));
-                                }
+                                fo.write(line.getBytes(StandardCharsets.UTF_8));
                             }
                         }
                     } catch (Exception e) {
@@ -274,6 +299,13 @@ public class FrpcManager {
             return false;
         }
         Minecraft.getInstance().gui.getChat().addMessage(Utils.proxyStartText(ip));
+        this.currentIP = ip;
         return true;
+    }
+    public String getCurrentIP() {
+        return this.currentIP;
+    }
+    public Process getFrpcProcess() {
+        return this.frpcProcess;
     }
 }
