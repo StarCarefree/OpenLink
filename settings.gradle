@@ -9,6 +9,7 @@ pluginManagement {
 
 rootProject.name = 'openlink'
 
+include 'frpc'
 include 'common'
 include 'fabric'
 include 'fabric-like'

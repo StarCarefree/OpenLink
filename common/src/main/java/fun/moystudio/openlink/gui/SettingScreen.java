@@ -1,15 +1,23 @@
 package fun.moystudio.openlink.gui;
 
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
+import com.mojang.blaze3d.platform.Window;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.datafixers.util.Pair;
 import fun.moystudio.openlink.OpenLink;
-import fun.moystudio.openlink.frpc.FrpcManager;
-import fun.moystudio.openlink.frpc.OpenFrpFrpcImpl;
+import fun.moystudio.openlink.frpcimpl.FrpcManager;
+import fun.moystudio.openlink.frpcimpl.OpenFrpFrpcImpl;
+import fun.moystudio.openlink.frpcimpl.SakuraFrpFrpcImpl;
 import fun.moystudio.openlink.json.JsonResponseWithData;
 import fun.moystudio.openlink.json.JsonUserInfo;
+import fun.moystudio.openlink.json.JsonUserInfoSakura;
+import fun.moystudio.openlink.json.JsonUserProxySakura;
 import fun.moystudio.openlink.logic.SettingTabs;
 import fun.moystudio.openlink.logic.Utils;
 import fun.moystudio.openlink.logic.WebBrowser;
 import fun.moystudio.openlink.mixin.IScreenAccessor;
+import fun.moystudio.openlink.network.Request;
 import fun.moystudio.openlink.network.Uris;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -34,6 +42,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,22 +58,24 @@ public class SettingScreen extends Screen {
     SettingTabs lasttab=null;
     SettingScreenButton buttonLog,buttonInfo,buttonUser,buttonSetting;
     JsonResponseWithData<JsonUserInfo> userInfo=null;
-    List<Renderable> renderableTabWidgets,tabLog=new ArrayList<>(),tabInfo=new ArrayList<>(),tabUser=new ArrayList<>(),tabLogin_User=new ArrayList<>(), tabSetting=new ArrayList<>();
+    JsonUserInfoSakura userInfoSakura=null;
+    JsonUserProxySakura userProxySakura=null;
+    public List<Renderable> renderableTabWidgets,tabLog=new ArrayList<>(),tabInfo=new ArrayList<>(),tabUser=new ArrayList<>(),tabLogin_User=new ArrayList<>(), tabSetting=new ArrayList<>();
     public static List<InfoObjectSelectionList.Information> informationList;
-    public static final ResourceLocation BACKGROUND_SETTING=Utils.createResourceLocation("openlink","textures/gui/background_setting.png");
-    public static boolean sensitiveInfoHiding;
+    public static final ResourceLocation BACKGROUND_SETTING=Utils.createResourceLocation("openlink","textures/gui/background_setting.png"), FRP_BUTTON = Utils.createResourceLocation("openlink", "widget/frp_change_button"), FRP_BUTTON_HOVERED = Utils.createResourceLocation("openlink", "widget/frp_change_button_hovered");
+    public static boolean sensitiveInfoHiding, unavailableNodeHiding;
 
     private static List<InfoObjectSelectionList.Information> getInformationList(Object... objects) {
         String[] lines= Utils.translatableText("text.openlink.info",objects).getString().split("\n");
         List<InfoObjectSelectionList.Information> informations=new ArrayList<>();
         for (String line:lines){
-            if(line.startsWith("#")){
+            if(line.startsWith("#")||line.isEmpty()){
                 continue;
             }
-            if(line.charAt(0)=='1'){
+            if(line.startsWith("1")){
                 informations.add(new InfoObjectSelectionList.Information(Utils.literalText(line.substring(1)),true));
             }
-            else if(line.charAt(0)=='0'){
+            else if(line.startsWith("0")){
                 informations.add(new InfoObjectSelectionList.Information(Utils.literalText(line.substring(1)),false));
             }
             else{
@@ -116,16 +127,52 @@ public class SettingScreen extends Screen {
                     10+j+20, 65+5,
                     this.width-20, 60+this.height-75-15,
                     Utils.translatableText("text.openlink.x_axis_label"), Utils.translatableText("text.openlink.y_axis_label"), lastdatapoints));
-            tabUser.add(Button.builder(Utils.translatableText("text.openlink.logout"), button -> {
-                FrpcManager.getInstance().getCurrentFrpcInstance().logOut();
-                this.minecraft.setScreen(new SettingScreen(lastscreen));
-            }).bounds(10,65+j+5+40,j,20).build());
-        } else {
-            tabUser.clear();
             tabUser.add(Button.builder(Utils.translatableText("text.openlink.logout"),button -> {
                 FrpcManager.getInstance().getCurrentFrpcInstance().logOut();
                 this.minecraft.setScreen(new SettingScreen(lastscreen));
-            }).bounds(this.width/2-20,this.height/2-10,40,20).build());
+            }).bounds(10,65+j+5+40,j-25,20).build());
+            tabUser.add(new ImageButtonWithHoveredState(10+j-25+5, 65+j+5+40, 20, 20, FRP_BUTTON, FRP_BUTTON_HOVERED, button -> {
+                this.minecraft.setScreen(new FrpcImplSelectionScreen(new SettingScreen(lastscreen)));
+            }));
+        } else if(FrpcManager.getInstance().getCurrentFrpcId().equals("sakurafrp")) {
+            ResourceLocation lastlocationimage = !tabUser.isEmpty() ? ((ImageWidget) tabUser.get(0)).texture : Utils.createResourceLocation("openlink", "textures/gui/sakurafrp_icon.png");
+            Component lastcomponent1 = tabUser.size() >= 2 ? ((ComponentWidget) tabUser.get(1)).getMessage() : Utils.emptyText();
+            Component lastcomponent2 = tabUser.size() >= 3 ? ((ComponentWidget) tabUser.get(2)).getMessage() : Utils.emptyText();
+            Component lastcomponent3 = tabUser.size() >= 4 ? ((ComponentWidget) tabUser.get(3)).getMessage() : Utils.emptyText();
+            Component lastcomponent4 = tabUser.size() >= 5 ? ((ComponentWidget) tabUser.get(4)).getMessage() : Utils.emptyText();
+            Component lastcomponent5 = tabUser.size() >= 6 ? ((ComponentWidget) tabUser.get(5)).getMessage() : Utils.emptyText();
+            int lastx2 = tabUser.size() >= 3 ? ((ComponentWidget) tabUser.get(2)).getX() : 10;
+            List<Pair<String, Long>> lastdatapoints = tabUser.size() >= 7 ? ((LineChartWidget) tabUser.get(6)).dataPoints : readTrafficSakura();
+            tabUser.clear();
+            int j = Math.min((this.width - 20) / 4, (this.height - 75) / 5 * 3);
+            tabUser.add(new ImageWidget(10, 65, 0, 0, j, j, j, j, lastlocationimage));
+            tabUser.add(new ComponentWidget(this.font, 10, 65 + j + 5, 0xffffff, lastcomponent1, false));
+            tabUser.add(new ComponentWidget(this.font, lastx2, 65 + j + 5, 0xacacac, lastcomponent2, false));
+            tabUser.add(new ComponentWidget(this.font, 10, 65 + j + 5 + 10, 0xacacac, lastcomponent3, false));
+            tabUser.add(new ComponentWidget(this.font, 10, 65 + j + 5 + 20, 0xacacac, lastcomponent4, false));
+            tabUser.add(new ComponentWidget(this.font, 10, 65 + j + 5 + 30, 0xacacac, lastcomponent5, false));
+            tabUser.add(new LineChartWidget(
+                    this.font,
+                    10 + j + 20, 65 + 5,
+                    this.width - 20, 60 + this.height - 75 - 15,
+                    Utils.translatableText("text.openlink.x_axis_label"), Utils.translatableText("text.openlink.y_axis_label"), lastdatapoints));
+            tabUser.add(Button.builder(Utils.translatableText("text.openlink.logout"), button -> {
+                FrpcManager.getInstance().getCurrentFrpcInstance().logOut();
+                this.minecraft.setScreen(new SettingScreen(lastscreen));
+            }).bounds(10, 65 + j + 5 + 40, j - 25, 20).build());
+            tabUser.add(new ImageButtonWithHoveredState(10 + j - 25 + 5, 65 + j + 5 + 40, 20, 20,  FRP_BUTTON, FRP_BUTTON_HOVERED, button -> {
+                this.minecraft.setScreen(new FrpcImplSelectionScreen(new SettingScreen(lastscreen)));
+            }));
+        } else {
+            tabUser.clear();
+            ResourceLocation icon = FrpcManager.getInstance().getCurrentFrpcInstance().getIcon();
+            if(icon!=null){
+                tabUser.add(new ImageWidget(this.width/2-32,this.height/2+50-10-64-5,0,0,64,64,64,64,icon));
+            }
+            tabUser.add(Button.builder(Utils.translatableText("text.openlink.logout"),button -> {
+                FrpcManager.getInstance().getCurrentFrpcInstance().logOut();
+                this.minecraft.setScreen(new SettingScreen(lastscreen));
+            }).bounds(this.width/2-20,this.height/2+50-10,40,20).build());
         }
 
         LogObjectSelectionList lastlogselectionlist=!tabLog.isEmpty()?((LogObjectSelectionList)tabLog.get(0)):new LogObjectSelectionList(minecraft,this.buttonSetting.getX()+this.buttonSetting.getWidth()-5,this.height-5-65,5,65,this.buttonSetting.getX()+this.buttonSetting.getWidth(),this.height-5,40);
@@ -156,17 +203,38 @@ public class SettingScreen extends Screen {
         tabInfo.add(lastinfoselectionlist);
         //Setting
         tabSetting.add(new ChartWidget(10,65,this.buttonSetting.getX()+this.buttonSetting.getWidth()-10-5,40, Utils.translatableText("text.openlink.secure"),0x8f2b2b2b));
+        tabSetting.add(new ChartWidget(10,65+40+10, this.buttonSetting.getX()+this.buttonSetting.getWidth()-10-5, 40, Utils.translatableText("text.openlink.nodes"),0x8f2b2b2b));
         tabSetting.add(new ComponentWidget(this.font,15,87,0xffffff, Utils.translatableText("setting.openlink.information_show"),false));
+        tabSetting.add(new ComponentWidget(this.font,15,87+40+10,0xffffff, Utils.translatableText("setting.openlink.node_hide"),false));
         tabSetting.add(CycleButton.onOffBuilder(sensitiveInfoHiding).displayOnlyValue().create(this.buttonSetting.getX()+this.buttonSetting.getWidth()-75-5,80,75,20, Utils.translatableText("setting.information_show"),(cycleButton, object) -> {
             sensitiveInfoHiding = object;
             OpenLink.PREFERENCES.putBoolean("setting_sensitive_info_hiding", object);
         }));
+        tabSetting.add(CycleButton.onOffBuilder(unavailableNodeHiding).displayOnlyValue().create(this.buttonSetting.getX()+this.buttonSetting.getWidth()-75-5,80+40+10,75,20, Utils.translatableText("setting.information_show"),(cycleButton, object) -> {
+            unavailableNodeHiding = object;
+            OpenLink.PREFERENCES.putBoolean("setting_unavailable_node_hiding", object);
+        }));
+        tabSetting.add(Button.builder(Utils.translatableText("text.openlink.wiki"), button -> {
+            this.minecraft.keyboardHandler.setClipboard(Uris.wikiUri.toString());
+            new WebBrowser(Uris.wikiUri.toString()).openBrowser();
+        }).bounds(this.width/2-150-5,65+40+10+40+10,150,20).build());
+        tabSetting.add(Button.builder(Utils.translatableText("text.openlink.openstoragedir"), button -> {
+            Util.getPlatform().openFile(FrpcManager.getInstance().getFrpcStoragePathById(FrpcManager.getInstance().getCurrentFrpcId()).toFile());
+        }).bounds(this.width/2+5,65+40+10+40+10,150,20).build());
         String url = FrpcManager.getInstance().getCurrentFrpcInstance().getPanelUrl();
         if(url != null) {
             tabSetting.add(Button.builder(Utils.translatableText("text.openlink.webpanel", FrpcManager.getInstance().getCurrentFrpcName()),button -> {
                 this.minecraft.keyboardHandler.setClipboard(url);
                 new WebBrowser(url).openBrowser();
-            }).bounds(this.width/2-75,65+70,150,20).build());
+            }).bounds(this.width/2-150-5,65+40+10+40+10+20+10,150,20).build());
+            tabSetting.add(Button.builder(Utils.translatableText("gui.openlink.frpcselectionscreentitle"), button -> {
+                this.minecraft.setScreen(new FrpcImplSelectionScreen(new SettingScreen(lastscreen)));
+            }).bounds(this.width/2+5, 65+40+10+40+10+20+10, 150, 20).build());
+        }
+        else {
+            tabSetting.add(Button.builder(Utils.translatableText("gui.openlink.frpcselectionscreentitle"), button -> {
+                this.minecraft.setScreen(new FrpcImplSelectionScreen(new SettingScreen(lastscreen)));
+            }).bounds(this.width/2-75, 65+40+10+40+10+20+10, 150, 20).build());
         }
     }
 
@@ -332,7 +400,7 @@ public class SettingScreen extends Screen {
                         StringBuilder sha256=new StringBuilder();
                         for (byte b:messageDigest.digest(userInfo.data.email.toLowerCase().getBytes(StandardCharsets.UTF_8)))
                             sha256.append(String.format("%02x",b));
-                        nowavatar.texture=new WebTextureResourceLocation(Uris.weavatarUri.toString()+ sha256+".png?s=400").location;
+                        nowavatar.texture=new WebTextureResourceLocation(Uris.weavatarUri.toString()+ sha256+".png?s=400",nowavatar.texture).location;
                         nowuser.setMessage(Utils.literalText(userInfo.data.username));
                         nowid.setMessage(Utils.literalText("#"+userInfo.data.id));
                         nowid.setX(10+nowuser.font.width(nowuser.getMessage())+1);
@@ -341,6 +409,55 @@ public class SettingScreen extends Screen {
                         nowproxy.setMessage(Utils.translatableText("text.openlink.proxycount",userInfo.data.used,userInfo.data.proxies));
                         List<Pair<String,Long>> dataPoints=readTraffic();
                         dataPoints.add(new Pair<>(Utils.translatableText("text.openlink.now").getString(),userInfo.data.traffic));
+                        nowtraffic.dataPoints=dataPoints;
+                        tabUser.set(0,nowavatar);
+                        tabUser.set(1,nowuser);
+                        tabUser.set(2,nowid);
+                        tabUser.set(3,nowemail);
+                        tabUser.set(4,nowgroup);
+                        tabUser.set(5,nowproxy);
+                    }, "Request thread").start();
+                } else if(first && FrpcManager.getInstance().getCurrentFrpcId().equals("sakurafrp")) {
+                    ImageWidget nowavatar=(ImageWidget)tabUser.get(0);
+                    ComponentWidget nowuser=(ComponentWidget)tabUser.get(1);
+                    ComponentWidget nowid=(ComponentWidget)tabUser.get(2);
+                    ComponentWidget nowemail=(ComponentWidget)tabUser.get(3);
+                    ComponentWidget nowgroup=(ComponentWidget)tabUser.get(4);
+                    ComponentWidget nowproxy=(ComponentWidget)tabUser.get(5);
+                    LineChartWidget nowtraffic=(LineChartWidget)tabUser.get(6);
+                    nowuser.setMessage(Utils.translatableText("text.openlink.loading"));
+                    nowid.setMessage(Utils.emptyText());
+                    nowemail.setMessage(Utils.emptyText());
+                    nowgroup.setMessage(Utils.emptyText());
+                    nowproxy.setMessage(Utils.emptyText());
+                    tabUser.set(1,nowuser);
+                    new Thread(() -> {
+                        Gson gson = new Gson();
+                        try {
+                            userInfoSakura = SakuraFrpFrpcImpl.getUserInfo();
+                            if(userInfoSakura==null||SakuraFrpFrpcImpl.isBadResponse(userInfoSakura)){
+                                SakuraFrpFrpcImpl.token=null;
+                                SakuraFrpFrpcImpl.writeSession();
+                                throw new Exception("[OpenLink] Session expired!");
+                            }
+                            userProxySakura = gson.fromJson(Request.GET(Uris.sakuraFrpAPIUri+"tunnels", SakuraFrpFrpcImpl.getTokenHeader()).getFirst(), new TypeToken<JsonUserProxySakura>(){}.getType());
+                            if(JsonUserProxySakura.isBadResponse(userProxySakura)) {
+                                throw new Exception("[OpenLink] Cannot get the user tunnel list!");
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            renderableTabWidgets=tabLogin_User;
+                            return;
+                        }
+                        nowavatar.texture=new WebTextureResourceLocation(userInfoSakura.avatar, nowavatar.texture).location;
+                        nowuser.setMessage(Utils.literalText(userInfoSakura.name));
+                        nowid.setMessage(Utils.literalText("#"+userInfoSakura.id));
+                        nowid.setX(10+nowuser.font.width(nowuser.getMessage())+1);
+                        nowemail.setMessage(Utils.literalText(userInfoSakura.speed));
+                        nowgroup.setMessage(Utils.literalText(userInfoSakura.group.name));
+                        nowproxy.setMessage(Utils.translatableText("text.openlink.proxycount",userProxySakura.size(),userInfoSakura.tunnels));
+                        List<Pair<String,Long>> dataPoints=readTrafficSakura();
+                        dataPoints.add(new Pair<>(Utils.translatableText("text.openlink.now").getString(),Long.valueOf((long)(SakuraFrpFrpcImpl.getUserInfo().traffic.get(1)/1048576F))));
                         nowtraffic.dataPoints=dataPoints;
                         tabUser.set(0,nowavatar);
                         tabUser.set(1,nowuser);
@@ -365,9 +482,6 @@ public class SettingScreen extends Screen {
 
     @Override
     public void tick(){
-        if (OpenLink.disabled) {
-            this.onClose();
-        }
         try {
             onTab();
         } catch (Exception e) {
@@ -379,6 +493,19 @@ public class SettingScreen extends Screen {
 
     public List<Pair<String,Long>> readTraffic(){
         String origin=OpenLink.PREFERENCES.get("traffic_storage","");
+        String[] spilt=origin.split(";");
+        List<Pair<String,Long>> res=new ArrayList<>();
+        for(String s:spilt) {
+            if(!s.isEmpty()) {
+                String[] split = s.split(",");
+                res.add(new Pair<>(split[0], Long.parseLong(split[1])));
+            }
+        }
+        return res;
+    }
+
+    public List<Pair<String,Long>> readTrafficSakura(){
+        String origin=OpenLink.PREFERENCES.get("traffic_storage_sakura","");
         String[] spilt=origin.split(";");
         List<Pair<String,Long>> res=new ArrayList<>();
         for(String s:spilt) {

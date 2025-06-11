@@ -1,0 +1,30 @@
+name: automerge
+on:
+  pull_request_target:
+    types: [opened, synchronize, labeled, unlabeled, reopened]
+
+jobs:
+  labeler:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/labeler@v5
+
+  automerge:
+    needs: labeler
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: automerge
+        uses: pascalgn/automerge-action@v0.16.3
+        env:
+          GITHUB_TOKEN: "${{ secrets.OPENLINK_BOT }}"
+          MERGE_LABELS: "crowdin"
+          UPDATE_LABELS: "crowdin"
+          MERGE_METHOD: "squash"
+          MERGE_DELETE_BRANCH: "true"
+          MERGE_CONDITION: "mergeable"

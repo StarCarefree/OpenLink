@@ -20,12 +20,4 @@ public abstract class MinecraftMixin {
     public void openLink$stopEvent(CallbackInfo ci){
         EventCallbacks.onClientStop();
     }
-
-    @Inject(method = "prepareForMultiplayer", at = @At("HEAD"), cancellable = true)
-    public void openLink$prepareForMultiplayer(CallbackInfo ci) {
-        if(LanConfig.getAuthMode()!=OnlineModeTabs.ONLINE_MODE){
-            LOGGER.warn("Server will run in offline mode!");
-            ci.cancel();
-        }
-    }
 }

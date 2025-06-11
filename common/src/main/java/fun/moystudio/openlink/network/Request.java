@@ -1,7 +1,7 @@
 package fun.moystudio.openlink.network;
 
 import com.mojang.datafixers.util.Pair;
-import fun.moystudio.openlink.frpc.OpenFrpFrpcImpl;
+import fun.moystudio.openlink.frpcimpl.OpenFrpFrpcImpl;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -17,6 +17,7 @@ import java.util.Map;
 public class Request {
     public final static Map<String,List<String>> DEFAULT_HEADER=new HashMap<>(){{
         put("Content-Type", Collections.singletonList("application/json"));
+        put("Accept", Collections.singletonList("application/json"));
     }};
 
     public static Pair<String,Map<String, List<String>>> POST(String url, Map<String,List<String>> header, String body) throws Exception {
