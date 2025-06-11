@@ -85,7 +85,8 @@ public class EventCallbacks {
         try{
             hasUpdate = FrpcManager.getInstance().getFrpcImplDetail(FrpcManager.getInstance().getCurrentFrpcId()).getSecond().getSecond();
         } catch (Exception e){
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            hasUpdate = false;
         }
     }
 }
