@@ -31,7 +31,8 @@ public class EventCallbacks {
         }
         if(screen instanceof TitleScreen){
             FrpcManager.getInstance().stop();
-            ((IScreenAccessor)screen).invokeAddRenderableWidget(new ImageButtonWithHoveredState(screen.width / 2 + 129, screen.height / 4 + 48 + 72 + 12,
+            int l = OpenLink.LOADER.equals("NeoForge")?screen.height / 4 + 32 + 22:screen.height / 4 + 48;
+            ((IScreenAccessor)screen).invokeAddRenderableWidget(new ImageButtonWithHoveredState(screen.width / 2 + 129,  l + 72 + 12,
                     20, 20, OPENLINK_SETTING, OPENLINK_SETTING_HOVERED, (button) -> minecraft.setScreen(new SettingScreen(null))));
         }
         for(Pair<String, Class<?>> classPair:OpenLink.CONFLICT_CLASS){
