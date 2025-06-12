@@ -3,6 +3,7 @@ package fun.moystudio.openlink.gui;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mojang.blaze3d.vertex.PoseStack;
+import fun.moystudio.openlink.OpenLink;
 import fun.moystudio.openlink.frpcimpl.FrpcManager;
 import fun.moystudio.openlink.frpcimpl.OpenFrpFrpcImpl;
 import fun.moystudio.openlink.json.JsonResponseWithData;
@@ -43,7 +44,7 @@ public class LoginScreen extends Screen {
                 button.active=false;
                 this.minecraft.setScreen(new ConfirmScreenWithLanguageButton(confirmed -> {if(OpenFrpFrpcImpl.Authorization!=null){this.onClose();}}, Utils.translatableText("text.openlink.fastlogin"), Utils.translatableText("text.openlink.fastloginconfirm")));
             } catch (Exception e) {
-                e.printStackTrace();
+                OpenLink.LOGGER.error("", e);
                 this.onClose();
             }
         }));

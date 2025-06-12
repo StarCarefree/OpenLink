@@ -26,7 +26,7 @@ public class WebTextureResourceLocation {
             location=Minecraft.getInstance().getTextureManager().register("avatar",new SelfCleaningDynamicTexture(image));
             stream.close();
         } catch (Exception e){
-            e.printStackTrace();
+            OpenLink.LOGGER.error("", e);
             OpenLink.LOGGER.error("Error on loading avatar web texture");
         }
     }

@@ -437,7 +437,7 @@ public class SettingScreen extends Screen {
                                 throw new Exception("[OpenLink] Session expired!");
                             }
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            OpenLink.LOGGER.error("", e);
                             renderableTabWidgets=tabLogin_User;
                             return;
                         }
@@ -493,7 +493,7 @@ public class SettingScreen extends Screen {
                                 throw new Exception("[OpenLink] Cannot get the user tunnel list!");
                             }
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            OpenLink.LOGGER.error("", e);
                             renderableTabWidgets=tabLogin_User;
                             return;
                         }
@@ -535,7 +535,7 @@ public class SettingScreen extends Screen {
         try {
             onTab();
         } catch (Exception e) {
-            e.printStackTrace();
+            OpenLink.LOGGER.error("", e);
             this.onClose();
         }
         lasttab=tab;

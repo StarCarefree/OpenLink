@@ -2,8 +2,11 @@ package fun.moystudio.openlink.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
+import fun.moystudio.openlink.OpenLink;
 import fun.moystudio.openlink.frpcimpl.SakuraFrpFrpcImpl;
-import fun.moystudio.openlink.json.*;
+import fun.moystudio.openlink.json.JsonNodeStatsSakura;
+import fun.moystudio.openlink.json.JsonNodesSakura;
+import fun.moystudio.openlink.json.JsonUserInfoSakura;
 import fun.moystudio.openlink.logic.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
@@ -93,7 +96,7 @@ public class NodeSelectionScreenSakura extends Screen {
                         }
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    OpenLink.LOGGER.error("", e);
                     this.minecraft.setScreen(lastscreen);
                 }
             },"Request thread").start();

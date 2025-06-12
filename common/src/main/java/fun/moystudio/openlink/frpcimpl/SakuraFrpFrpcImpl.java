@@ -119,7 +119,7 @@ public class SakuraFrpFrpcImpl implements Frpc {
             }
             if(!token.equals(response.token)) token=response.token;
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("", e);
             return null;
         }
         return response;
@@ -181,7 +181,7 @@ public class SakuraFrpFrpcImpl implements Frpc {
                 return false;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("", e);
             return false;
         }
         downloadUrl = response.frpc.archs.get(osName+"_"+osArch).url;

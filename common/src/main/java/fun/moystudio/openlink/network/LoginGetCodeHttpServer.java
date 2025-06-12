@@ -60,14 +60,14 @@ public class LoginGetCodeHttpServer {
                         try {
                             Request.POST(Uris.openFrpAPIUri + "oauth2/callback?code=" + this.code + "&redirect_url=http://localhost:"+this.port, Request.DEFAULT_HEADER, "{}");
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            OpenLink.LOGGER.error("", e);
                             throw new RuntimeException(e);
                         }
                         this.stop();
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                OpenLink.LOGGER.error("", e);
                 exchange.getResponseHeaders().set("Content-Type", "text/html;charset=UTF-8");
                 exchange.sendResponseHeaders(500, 0);
             }

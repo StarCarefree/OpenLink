@@ -128,7 +128,7 @@ public final class OpenLink {
             }
             OpenLink.LOGGER.info("User Country Code: " + jsonIP.countryCode + ", Prefer Classify: " + preferClassify);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("", e);
             OpenLink.LOGGER.warn("Can not get user country! Ignoring...");
         }
         return preferClassify;
