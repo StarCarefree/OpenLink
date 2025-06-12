@@ -29,8 +29,8 @@ public class WebTextureResourceLocation {
             location = location1;
             stream.close();
         } catch (Exception e){
-            e.printStackTrace();
-            OpenLink.LOGGER.error("Error on loading avatar web texture!");
+            OpenLink.LOGGER.error("", e);
+            OpenLink.LOGGER.error("Error on loading avatar web texture");
         }
     }
 }

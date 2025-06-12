@@ -1,5 +1,6 @@
 package fun.moystudio.openlink.gui;
 
+import fun.moystudio.openlink.OpenLink;
 import fun.moystudio.openlink.frpcimpl.OpenFrpFrpcImpl;
 import fun.moystudio.openlink.json.JsonNode;
 import fun.moystudio.openlink.json.JsonResponseWithData;
@@ -96,7 +97,7 @@ public class NodeSelectionScreen extends Screen {
                         }
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    OpenLink.LOGGER.error("", e);
                     this.minecraft.setScreen(lastscreen);
                 }
             },"Request thread").start();

@@ -13,7 +13,6 @@ import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
 import net.neoforged.neoforge.client.event.ScreenEvent;
-import net.neoforged.neoforge.event.level.LevelEvent;
 import net.neoforged.neoforge.internal.versions.neoforge.NeoForgeVersion;
 
 @EventBusSubscriber

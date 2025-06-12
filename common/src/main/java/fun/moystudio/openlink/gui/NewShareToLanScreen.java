@@ -18,9 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.HttpUtil;
 import net.minecraft.world.level.GameType;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 public class NewShareToLanScreen extends Screen {
     private static final Component ALLOW_COMMANDS_LABEL = Utils.translatableText("selectWorld.allowCommands");

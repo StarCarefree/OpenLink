@@ -15,10 +15,6 @@ import net.minecraft.client.gui.screens.ShareToLanScreen;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.resources.ResourceLocation;
 
-import javax.net.ssl.SSLHandshakeException;
-import java.io.IOException;
-import java.net.SocketException;
-
 public class EventCallbacks {
     private static final ResourceLocation OPENLINK_SETTING = Utils.createResourceLocation("openlink", "widget/setting_button");
     private static final ResourceLocation OPENLINK_SETTING_HOVERED = Utils.createResourceLocation("openlink", "widget/setting_button_hovered");
@@ -84,7 +80,7 @@ public class EventCallbacks {
         try{
             hasUpdate = FrpcManager.getInstance().getFrpcImplDetail(FrpcManager.getInstance().getCurrentFrpcId()).getSecond().getSecond();
         } catch (Exception e){
-            e.printStackTrace();
+            OpenLink.LOGGER.error("", e);
             hasUpdate = false;
         }
     }

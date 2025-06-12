@@ -275,7 +275,7 @@ public class OpenFrpFrpcImpl implements Frpc{
         try {
             frpcVersionJson = gson.fromJson(Request.GET(Uris.openFrpAPIUri+"commonQuery/get?key=software",Request.DEFAULT_HEADER).getFirst(),new TypeToken<JsonResponseWithData<JsonDownloadFile>>(){}.getType());
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("", e);
             return false;
         }
         boolean result = false;
@@ -315,7 +315,7 @@ public class OpenFrpFrpcImpl implements Frpc{
                         }
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    LOGGER.error("", e);
                 }
             }
         }
