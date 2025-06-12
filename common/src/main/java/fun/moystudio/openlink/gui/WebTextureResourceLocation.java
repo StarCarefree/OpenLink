@@ -36,9 +36,9 @@ public class WebTextureResourceLocation {
         }
     }
 
-    protected static NativeImage convertJpegToPng(InputStream in) {
-        NativeImage nativeImage = null;
-        ByteArrayOutputStream byteArrayOut = null;
+    private NativeImage convertJpegToPng(InputStream in) {
+        NativeImage nativeImage;
+        ByteArrayOutputStream byteArrayOut;
         try {
             BufferedImage bufferedImage = ImageIO.read(in);
             byteArrayOut = new ByteArrayOutputStream();

@@ -168,6 +168,11 @@ public class SakuraFrpFrpcImpl implements Frpc {
         writeSession();
     }
 
+    @Override
+    public String getPanelUrl() {
+        return "https://www.natfrp.com/user/";
+    }
+
     public static boolean isBadResponse(JsonBaseResponseSakura response) {
         return response.code >= 400;
     }
