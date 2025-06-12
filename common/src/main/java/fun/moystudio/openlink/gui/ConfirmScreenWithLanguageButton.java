@@ -4,7 +4,6 @@ import fun.moystudio.openlink.logic.Utils;
 import it.unimi.dsi.fastutil.booleans.BooleanConsumer;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
-import net.minecraft.client.gui.components.MultiLineLabel;
 import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.LanguageSelectScreen;
 import net.minecraft.network.chat.Component;

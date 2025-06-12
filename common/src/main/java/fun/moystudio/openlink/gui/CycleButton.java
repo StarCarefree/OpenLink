@@ -2,10 +2,6 @@
 package fun.moystudio.openlink.gui;
 
 import com.google.common.collect.ImmutableList;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.BooleanSupplier;
-import java.util.function.Function;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.TooltipAccessor;
 import net.minecraft.client.gui.screens.Screen;
@@ -16,6 +12,11 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.function.BooleanSupplier;
+import java.util.function.Function;
 
 public class CycleButton<T> extends AbstractButton implements TooltipAccessor {
     static final BooleanSupplier DEFAULT_ALT_LIST_SELECTOR = Screen::hasAltDown;
