@@ -447,7 +447,7 @@ public class SettingScreen extends Screen {
                             renderableTabWidgets=tabLogin_User;
                             return;
                         }
-                        nowavatar.texture=new WebTextureResourceLocation(userInfoSakura.avatar, nowavatar.texture).location;
+                        nowavatar.texture=new WebTextureResourceLocation(userInfoSakura.avatar+"?s=400", nowavatar.texture).location;
                         nowuser.setMessage(Utils.literalText(userInfoSakura.name));
                         nowid.setMessage(Utils.literalText("#"+userInfoSakura.id));
                         nowid.setX(10+nowuser.font.width(nowuser.getMessage())+1);
