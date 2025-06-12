@@ -3,6 +3,7 @@ package fun.moystudio.openlink.logic;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
+import fun.moystudio.openlink.OpenLink;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
@@ -46,7 +47,7 @@ public class UUIDFixer {
                     return uuid;
             }
         } catch (IOException | JsonSyntaxException e) {
-            e.printStackTrace();
+            OpenLink.LOGGER.error("", e);
         }
 
         return null;

@@ -1,10 +1,8 @@
 package fun.moystudio.openlink.gui;
 
-import fun.moystudio.openlink.logic.Utils;
 import it.unimi.dsi.fastutil.booleans.BooleanConsumer;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.CommonButtons;
-import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.SpriteIconButton;
 import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.options.LanguageSelectScreen;

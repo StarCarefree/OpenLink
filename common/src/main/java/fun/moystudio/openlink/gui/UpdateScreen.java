@@ -7,8 +7,8 @@ import fun.moystudio.openlink.logic.Utils;
 import net.minecraft.Util;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.*;
-import net.minecraft.client.gui.screens.options.LanguageSelectScreen;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.options.LanguageSelectScreen;
 import net.minecraft.network.chat.CommonComponents;
 
 public class UpdateScreen extends Screen {

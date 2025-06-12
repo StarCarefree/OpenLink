@@ -1,8 +1,6 @@
 package fun.moystudio.openlink.mixin;
 
 import fun.moystudio.openlink.logic.EventCallbacks;
-import fun.moystudio.openlink.logic.LanConfig;
-import fun.moystudio.openlink.logic.OnlineModeTabs;
 import net.minecraft.client.Minecraft;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
