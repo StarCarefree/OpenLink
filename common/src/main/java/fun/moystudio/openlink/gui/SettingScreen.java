@@ -303,9 +303,25 @@ public class SettingScreen extends Screen {
         guiGraphics.blit(RenderType::guiTextured,BACKGROUND_SETTING,0,0,0,0,this.width,this.height,this.width,this.height);
         guiGraphics.fill(5,60,this.buttonSetting.getX()+this.buttonSetting.getWidth(),this.height-5,0x8F000000);
         title.renderCentered(guiGraphics,this.width/2,15);
+        if(tab==SettingTabs.USER) {
+            if(FrpcManager.getInstance().getCurrentFrpcId().equals("openfrp")&&wrlof!=null) {
+                if(wrlof.stream!=null) wrlof.read();
+                ImageWidget nowavatar=(ImageWidget)tabUser.get(0);
+                nowavatar.texture = wrlof.location;
+                wrlof = null;
+            }
+            if(FrpcManager.getInstance().getCurrentFrpcId().equals("sakurafrp")&&wrlsf!=null) {
+                if(wrlsf.stream!=null) wrlsf.read();
+                ImageWidget nowavatar=(ImageWidget)tabUser.get(0);
+                nowavatar.texture = wrlsf.location;
+                wrlsf = null;
+            }
+        }
         if(renderableTabWidgets!=null) renderableTabWidgets.forEach(widget -> widget.render(guiGraphics,i,j,f));
         if(((IScreenAccessor)this).getRenderables()!=null) ((IScreenAccessor)this).getRenderables().forEach(widget -> widget.render(guiGraphics,i,j,f));
     }
+
+    WebTextureResourceLocation wrlof,wrlsf;
 
     String avatarSha256 = null;
     private void onTab() {
@@ -367,8 +383,8 @@ public class SettingScreen extends Screen {
                 }
                 if(avatarSha256 != null){
                     ImageWidget widget = ((ImageWidget)tabUser.get(0));
-                    widget.texture=new WebTextureResourceLocation(Uris.weavatarUri.toString()+avatarSha256+".png?s=400", widget.texture).location;
-                    tabUser.set(0, widget);
+                    wrlof = new WebTextureResourceLocation(Uris.weavatarUri.toString()+avatarSha256+".png?s=400", widget.texture);
+                    wrlof.load();
                     avatarSha256 = null;
                 }
                 if(first && FrpcManager.getInstance().getCurrentFrpcId().equals("openfrp")) {
@@ -455,7 +471,8 @@ public class SettingScreen extends Screen {
                             renderableTabWidgets=tabLogin_User;
                             return;
                         }
-                        nowavatar.texture=new WebTextureResourceLocation(userInfoSakura.avatar+"?s=400", nowavatar.texture).location;
+                        wrlsf = new WebTextureResourceLocation(userInfoSakura.avatar+"?s=400", nowavatar.texture);
+                        wrlsf.load();
                         nowuser.setMessage(Utils.literalText(userInfoSakura.name));
                         nowid.setMessage(Utils.literalText("#"+userInfoSakura.id));
                         nowid.setX(10+nowuser.font.width(nowuser.getMessage())+1);
