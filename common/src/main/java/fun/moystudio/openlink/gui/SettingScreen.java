@@ -356,9 +356,26 @@ public class SettingScreen extends Screen {
         blit(poseStack,0,0,0,0,this.width,this.height,this.width,this.height);
         fill(poseStack,5,60,this.buttonSetting.x+this.buttonSetting.getWidth(),this.height-5,0x8F000000);
         title.renderCentered(poseStack,this.width/2,15);
+        if(tab==SettingTabs.USER) {
+            if(FrpcManager.getInstance().getCurrentFrpcId().equals("openfrp")&&wrlof!=null) {
+                if(wrlof.stream!=null) wrlof.read();
+                ImageWidget nowavatar=(ImageWidget)tabUser.get(0);
+                nowavatar.texture = wrlof.location;
+                wrlof = null;
+            }
+            if(FrpcManager.getInstance().getCurrentFrpcId().equals("sakurafrp")&&wrlsf!=null) {
+                if(wrlsf.stream!=null) wrlsf.read();
+                ImageWidget nowavatar=(ImageWidget)tabUser.get(0);
+                nowavatar.texture = wrlsf.location;
+                wrlsf = null;
+            }
+        }
+
         if(renderableTabWidgets!=null) renderableTabWidgets.forEach(widget -> widget.render(poseStack,i,j,f));
         super.render(poseStack,i,j,f);
     }
+
+    WebTextureResourceLocation wrlof,wrlsf;
 
     private void onTab() {
         boolean first=lasttab!=tab;
@@ -453,7 +470,8 @@ public class SettingScreen extends Screen {
                         StringBuilder sha256=new StringBuilder();
                         for (byte b:messageDigest.digest(userInfo.data.email.toLowerCase().getBytes(StandardCharsets.UTF_8)))
                             sha256.append(String.format("%02x",b));
-                        nowavatar.texture=new WebTextureResourceLocation(Uris.weavatarUri.toString()+ sha256+".png?s=400", nowavatar.texture).location;
+                        wrlof = new WebTextureResourceLocation(Uris.weavatarUri.toString()+ sha256+".png?s=400", nowavatar.texture);
+                        wrlof.load();
                         nowuser.component= Utils.literalText(userInfo.data.username);
                         nowid.component= Utils.literalText("#"+userInfo.data.id);
                         nowid.x=10+nowuser.font.width(nowuser.component)+1;
@@ -502,7 +520,8 @@ public class SettingScreen extends Screen {
                             renderableTabWidgets=tabLogin_User;
                             return;
                         }
-                        nowavatar.texture=new WebTextureResourceLocation(userInfoSakura.avatar+"?s=400", nowavatar.texture).location;
+                        wrlsf = new WebTextureResourceLocation(userInfoSakura.avatar+"?s=400", nowavatar.texture);
+                        wrlsf.load();
                         nowuser.component= Utils.literalText(userInfoSakura.name);
                         nowid.component= Utils.literalText("#"+userInfoSakura.id);
                         nowid.x=10+nowuser.font.width(nowuser.component)+1;
