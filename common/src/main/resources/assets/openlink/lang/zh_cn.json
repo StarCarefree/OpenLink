@@ -46,6 +46,7 @@
   "text.openlink.openstoragedir": "打开存储文件夹",
   "text.openlink.outdated": "§c过时",
   "text.openlink.proxycount": "隧道数: %s/%s",
+  "text.openlink.nodes": "节点",
   "text.openlink.realnametounlock": "§n*中国大陆地区节点不可用，因为您的账户没有完成实名认证。",
   "text.openlink.remote_port": "远程端口（选填）",
   "text.openlink.remoteportnotfound": "§c§l在 5 次尝试后找不到任何可用的远程端口§o§i（也许你今天太不幸运了 :> ）",
