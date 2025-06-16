@@ -2,12 +2,6 @@ architectury {
     platformSetupLoomIde()
 }
 
-dependencies {
-    // We depend on Fabric Loader here to use the Fabric @Environment annotations,
-    // Do NOT use other classes from Fabric Loader.
-    modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
-}
-
 loom {
     mixin { useLegacyMixinAp = false }
 }
