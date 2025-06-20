@@ -35,8 +35,8 @@ dependencies {
     common(project(path: ':fabric-like', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':fabric-like', configuration: 'transformProductionFabric')
 
-    runtimeOnly project(path: ":frpc", configuration: "namedElements")
-    include project(":frpc")
+//    modApi include("maven.modrinth:openlink_frpc_api:1.0.0-fabric")
+    modApi include(files("../temp-libs/openlink_frpc_api-fabric-1.0.0.jar"))
 }
 
 processResources {

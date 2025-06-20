@@ -46,6 +46,7 @@
   "text.openlink.openstoragedir": "ストレージフォルダを開く",
   "text.openlink.outdated": "§c旧バージョン",
   "text.openlink.proxycount": "プロキシ: %s/%s",
+  "text.openlink.nodes": "ノード",
   "text.openlink.realnametounlock": "§n*実名認証が完了していないため、中国本土のノードは利用できません。",
   "text.openlink.remote_port": "プロキシリモートポート(オプション)",
   "text.openlink.remoteportnotfound": "§c§l5回試しても，利用可能なリモートポートが見つかりません§o§i\n(今日は運が悪いのかもしれません:>)",

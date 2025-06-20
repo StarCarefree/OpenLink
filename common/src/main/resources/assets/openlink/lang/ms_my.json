@@ -46,6 +46,7 @@
   "text.openlink.openstoragedir": "Buka folder storan",
   "text.openlink.outdated": "§cKetinggalan",
   "text.openlink.proxycount": "Proksi: %s/%s",
+  "text.openlink.nodes": "Nod",
   "text.openlink.realnametounlock": "§n*Nod di Tanah Besar China tidak tersedia kerana anda belum mengesahkan nama sebenar anda.",
   "text.openlink.remote_port": "Port jauh proksi (Pilihan)",
   "text.openlink.remoteportnotfound": "§c§lTidak dapat mencari sebarang port jauh yang tersedia selepas 5 cubaan§o§i\n(Mungkin hari ini bukan hari bertuah anda :>)",
