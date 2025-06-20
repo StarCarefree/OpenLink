@@ -46,6 +46,7 @@
   "text.openlink.openstoragedir": "Buka folder penyimpanan",
   "text.openlink.outdated": "§cKetinggalan Zaman",
   "text.openlink.proxycount": "Proksi: %s/%s",
+  "text.openlink.nodes": "Simpul",
   "text.openlink.realnametounlock": "§n*Node di Tiongkok Daratan tidak tersedia karena Anda belum mengautentikasi nama asli Anda.",
   "text.openlink.remote_port": "Port jarak jauh proxy (Opsional)",
   "text.openlink.remoteportnotfound": "§c§lTidak dapat menemukan port jarak jauh yang tersedia setelah 5 kali mencoba§o§i(Mungkin Anda kurang beruntung hari ini :>)",
