@@ -37,8 +37,8 @@ dependencies {
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionNeoForge')
 
-//    modApi include("maven.modrinth:openlink_frpc_api:1.0.0-neoforge-1.21plus")
-    modApi include(files("../temp-libs/openlink_frpc_api-neoforge-1.21plus-1.0.0.jar"))
+//    modImplementation include("maven.modrinth:openlink_frpc_api:1.0.0-neoforge-1.21plus")
+    modImplementation include(files("../temp-libs/openlink_frpc_api-neoforge-1.21plus-1.0.0.jar"))
 }
 
 processResources {
