@@ -42,7 +42,7 @@ dependencies {
     shadowBundle project(path: ':fabric-like', configuration: 'transformProductionQuilt')
 
 //    modImplementation include("maven.modrinth:openlink_frpc_api:1.0.0-quilt")
-    modImplementation include(files("../temp-libs/openlink_frpc_api-quilt-1.0.0.jar"))
+    modImplementation include("fun.moystudio.openlink.frpc:openlink_frpc_api-quilt:1.0.0")
 }
 
 processResources {

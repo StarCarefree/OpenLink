@@ -35,6 +35,7 @@ subprojects {
                 includeGroup "maven.modrinth"
             }
         }
+        mavenLocal()
     }
 
     loom {

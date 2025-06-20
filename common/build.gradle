@@ -8,5 +8,5 @@ dependencies {
     // Do NOT use other classes from Fabric Loader.
     modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
 //    modImplementation "maven.modrinth:openlink_frpc_api:1.0.0-fabric"
-    modImplementation include(files("../temp-libs/openlink_frpc_api-fabric-1.0.0.jar"))
+    modImplementation "fun.moystudio.openlink.frpc:openlink_frpc_api-fabric:1.0.0"
 }
