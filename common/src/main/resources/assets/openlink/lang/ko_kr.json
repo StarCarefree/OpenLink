@@ -46,6 +46,7 @@
   "text.openlink.openstoragedir": "저장 폴더 열기",
   "text.openlink.outdated": "§c오래됨",
   "text.openlink.proxycount": "프록시: %s/%s",
+  "text.openlink.nodes": "노드",
   "text.openlink.realnametounlock": "§n*본인 인증을 하지 않아 중국 본토 노드를 사용할 수 없습니다.",
   "text.openlink.remote_port": "프록시 원격 포트(선택 사항)",
   "text.openlink.remoteportnotfound": "§5번 시도 후 사용 가능한 원격 포트를 찾을 수 없습니다.\n(오늘은 운이 좋지 않은 것 같습니다 :>)",
