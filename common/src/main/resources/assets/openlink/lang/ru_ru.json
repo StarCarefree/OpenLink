@@ -46,6 +46,7 @@
   "text.openlink.openstoragedir": "Открыть папку хранения",
   "text.openlink.outdated": "§cУстаревший",
   "text.openlink.proxycount": "Прокси: %s/%s",
+  "text.openlink.nodes": "Узлы",
   "text.openlink.realnametounlock": "§n*Узлы на континенте Китая недоступны, так как вы не аутентифицировали ваше настоящее имя.",
   "text.openlink.remote_port": "Удаленный порт прокси (необязательно)",
   "text.openlink.remoteportnotfound": "§c§lНе можем найти уделённый порта после 5 попыток§o§i\n(Наверное, сегодня просто не ваш день:>)",

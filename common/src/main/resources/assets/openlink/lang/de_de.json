@@ -46,6 +46,7 @@
   "text.openlink.openstoragedir": "Machen die Datenspeicherung auf",
   "text.openlink.outdated": "Altmodisch",
   "text.openlink.proxycount": "Tunnel: %s/%s",
+  "text.openlink.nodes": "Knoten",
   "text.openlink.realnametounlock": "§n*Schwingungsknoten in Chinesisches-Festland sind nicht brauchbar, weil Sie nicht seine echt Name nachgeprüft hat.",
   "text.openlink.remote_port": "Tunnel weite Port(fakultativ)",
   "text.openlink.remoteportnotfound": "§c§l kann nach 5 Versuchen keinen verfügbaren Port finden§o§i\n(Vielleicht bist du heute nicht glücklich :>)",

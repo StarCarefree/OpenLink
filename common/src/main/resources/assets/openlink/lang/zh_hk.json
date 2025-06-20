@@ -46,6 +46,7 @@
   "text.openlink.openstoragedir": "打開存儲資料夾",
   "text.openlink.outdated": "§c過時",
   "text.openlink.proxycount": "代理: %s/%s",
+  "text.openlink.nodes": "節點",
   "text.openlink.realnametounlock": "§n*中國大陸節點因你未完成實名認證而不可用。",
   "text.openlink.remote_port": "代理遠程端口（可選）",
   "text.openlink.remoteportnotfound": "§c§l嘗試 5 次後依然都係搵唔到任何可用嘅遠程端口\n§o§i(可能你今日運氣麻麻地:/)",
