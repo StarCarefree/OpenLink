@@ -42,7 +42,8 @@ dependencies {
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionForge')
 
-    include project(":frpc")
+//    modApi include("maven.modrinth:openlink_frpc_api:1.0.0-forge")
+    modApi include(files("../temp-libs/openlink_frpc_api-forge-1.0.0.jar"))
 }
 
 processResources {

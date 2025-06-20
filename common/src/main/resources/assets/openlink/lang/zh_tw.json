@@ -46,6 +46,7 @@
   "text.openlink.openstoragedir": "打開存儲資料夾",
   "text.openlink.outdated": "§c過時囉",
   "text.openlink.proxycount": "隧道數: %s/%s",
+  "text.openlink.nodes": "節點",
   "text.openlink.realnametounlock": "§n*中國大陸節點無法使用，因為你尚未完成實名認證。",
   "text.openlink.remote_port": "隧道遠端連接埠（可選）",
   "text.openlink.remoteportnotfound": "§c§l嘗試 5 次後找不到任何可用的遠端連接埠§o§i\n（也許你今天運氣不佳 :]）",
