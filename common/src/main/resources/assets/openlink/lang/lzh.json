@@ -46,6 +46,7 @@
   "text.openlink.openstoragedir": "开Frpc存储之位",
   "text.openlink.outdated": "§c旧版",
   "text.openlink.proxycount": "统而人: %s/%s",
+  "text.openlink.nodes": "节点",
   "text.openlink.realnametounlock": "§n*中原节点不可用，因汝未行实名之证。",
   "text.openlink.remote_port": "远程端口(择填之)",
   "text.openlink.remoteportnotfound": "§c§l之疏缓兮§o§i\n(或汝今日气运不好：>)",
