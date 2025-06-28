@@ -96,10 +96,10 @@ public class SettingScreen extends Screen {
         buttonLog=new SettingScreenButton(5+i,40,i,20,SettingTabs.LOG.component,(button -> tab=SettingTabs.LOG));
         buttonInfo=new SettingScreenButton(5+i*2,40,i,20,SettingTabs.INFO.component,(button -> tab=SettingTabs.INFO));
         buttonSetting=new SettingScreenButton(5+i*3,40,i,20,SettingTabs.SETTING.component,(button -> tab=SettingTabs.SETTING));
-        addRenderableWidget(buttonLog);
-        addRenderableWidget(buttonInfo);
-        addRenderableWidget(buttonUser);
-        addRenderableWidget(buttonSetting);
+        addRenderableOnly(buttonLog);
+        addRenderableOnly(buttonInfo);
+        addRenderableOnly(buttonUser);
+        addRenderableOnly(buttonSetting);
         //Temp variables
         if(FrpcManager.getInstance().getCurrentFrpcId().equals("openfrp")){
             ResourceLocation lastlocationimage=!tabUser.isEmpty()?((ImageWidget)tabUser.get(0)).texture:Utils.createResourceLocation("openlink","textures/gui/default_avatar.png");
@@ -236,22 +236,21 @@ public class SettingScreen extends Screen {
         }
     }
 
-    public List<? extends GuiEventListener> getChildrenWithTabRenderables(){
-        List<GuiEventListener> list=(((IScreenAccessor)this).getChildren());
-        if(renderableTabWidgets!=null){
-            renderableTabWidgets.forEach(widget -> {
-                if (widget instanceof GuiEventListener guiEventListener) {
-                    list.add(guiEventListener);
-                }
-            });
-        }
-        return list;
-    }
-
     //MouseEventsOverrideBegin
     @Override
     public boolean mouseClicked(double d, double e, int i) {
         if(renderableTabWidgets!=null){
+            Button[] buttons = {buttonUser, buttonLog, buttonInfo, buttonSetting};//to make sure that tab buttons have higher priority than other GuiEventListeners
+            for (Button button:buttons) {
+                if (button.mouseClicked(d, e, i)) {
+                    this.setFocused(button);
+                    if (i == 0) {
+                        this.setDragging(true);
+                    }
+
+                    return true;
+                }
+            }
             for(Renderable widget:renderableTabWidgets){
                 if (widget instanceof GuiEventListener guiEventListener) {
                     if (!(guiEventListener instanceof AbstractButton||guiEventListener instanceof ObjectSelectionList<?>)) continue;
@@ -271,6 +270,10 @@ public class SettingScreen extends Screen {
 
     @Override
     public void mouseMoved(double d, double e) {
+        Button[] buttons = {buttonUser, buttonLog, buttonInfo, buttonSetting};
+        for(Button button:buttons) {//to make sure that tab buttons have higher priority than other GuiEventListeners
+            button.mouseMoved(d,e);
+        }
         if(renderableTabWidgets!=null){
             renderableTabWidgets.forEach(widget -> {
                 if(widget instanceof GuiEventListener guiEventListener){
@@ -285,6 +288,12 @@ public class SettingScreen extends Screen {
     public @NotNull Optional<GuiEventListener> getChildAt(double d, double e) {
         Optional<GuiEventListener> toReturn=super.getChildAt(d,e);
         if(toReturn.isEmpty()&&renderableTabWidgets!=null){
+            Button[] buttons = {buttonUser, buttonLog, buttonInfo, buttonSetting};
+            for(Button button:buttons) {//to make sure that tab buttons have higher priority than other GuiEventListeners
+                if(button.isMouseOver(d,e)) {
+                    return Optional.of(button);
+                }
+            }
             for(Renderable widget:renderableTabWidgets){
                 if (widget instanceof GuiEventListener guiEventListener) {
                     if (guiEventListener.isMouseOver(d, e)) {

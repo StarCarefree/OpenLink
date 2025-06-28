@@ -12,8 +12,6 @@ import java.util.List;
 
 @Mixin(Screen.class)
 public interface IScreenAccessor {
-    @Accessor("children")
-    List<GuiEventListener> getChildren();
     @Accessor("renderables")
     List<Renderable> getRenderables();
     @Invoker("addRenderableWidget")
