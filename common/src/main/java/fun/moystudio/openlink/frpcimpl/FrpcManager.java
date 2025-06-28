@@ -52,7 +52,7 @@ public class FrpcManager {
                 instance.init();
             } catch (SSLHandshakeException e) {
                 LOGGER.error("", e);
-                OpenLink.LOGGER.error("SSL Handshake Error! Ignoring SSL(Not Secure)");
+                LOGGER.error("SSL Handshake Error! Ignoring SSL(Not Secure)");
                 try {
                     SSLUtils.ignoreSsl();
                 } catch (Exception ex) {
@@ -61,11 +61,11 @@ public class FrpcManager {
             } catch (SocketException e){
                 LOGGER.error("", e);
                 OpenLink.disabled = true;
-                OpenLink.LOGGER.error("Socket Error! Are you still connecting to the network? All the features will be disabled!");
+                LOGGER.error("Socket Error! Are you still connecting to the network? All the features will be disabled!");
             } catch (IOException e) {
                 LOGGER.error("", e);
                 OpenLink.disabled = true;
-                OpenLink.LOGGER.error("IO Error! Are you still connecting to the network? All the features will be disabled!");
+                LOGGER.error("IO Error! Are you still connecting to the network? All the features will be disabled!");
             } catch (Exception e) {
                 LOGGER.error("", e);
                 LOGGER.error("Cannot load {}: cannot initialize this frpc implementation.", instance.id());
