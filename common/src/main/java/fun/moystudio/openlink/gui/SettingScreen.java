@@ -2,6 +2,7 @@ package fun.moystudio.openlink.gui;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.datafixers.util.Pair;
 import fun.moystudio.openlink.OpenLink;
 import fun.moystudio.openlink.frpcimpl.FrpcManager;
@@ -23,7 +24,9 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -308,8 +311,7 @@ public class SettingScreen extends Screen {
 
     @Override
     public void render(GuiGraphics guiGraphics, int i, int j, float f){
-        renderBackground(guiGraphics,i,j,f);
-        guiGraphics.blit(RenderType::guiTextured,BACKGROUND_SETTING,0,0,0,0,this.width,this.height,this.width,this.height);
+        guiGraphics.blit(RenderPipelines.GUI_TEXTURED,BACKGROUND_SETTING,0,0,0,0,this.width,this.height,this.width,this.height);
         guiGraphics.fill(5,60,this.buttonSetting.getX()+this.buttonSetting.getWidth(),this.height-5,0x8F000000);
         title.renderCentered(guiGraphics,this.width/2,15);
         if(tab==SettingTabs.USER) {
@@ -651,7 +653,7 @@ public class SettingScreen extends Screen {
                 guiGraphics.drawString(SettingScreen.LogObjectSelectionList.this.minecraft.font, this.port, x + entryWidth - 4 - LogObjectSelectionList.this.minecraft.font.width(this.port), y + 4, 0x8fffffff);
                 guiGraphics.drawString(SettingScreen.LogObjectSelectionList.this.minecraft.font, this.provider, x + entryWidth - 4 - LogObjectSelectionList.this.minecraft.font.width(this.provider), y + 4 + (entryHeight-4) / 2, 0x8fffffff);
                 if(isHovered){
-                    guiGraphics.renderTooltip(LogObjectSelectionList.this.minecraft.font, Utils.translatableText("text.openlink.doubleclick",new File(filePath).getName()), mouseX, mouseY);
+                    guiGraphics.renderTooltip(LogObjectSelectionList.this.minecraft.font, List.of(ClientTooltipComponent.create((Utils.translatableText("text.openlink.doubleclick",new File(filePath).getName())).getVisualOrderText())), mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
                 }
             }
         }

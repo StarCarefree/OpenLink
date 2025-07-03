@@ -1,9 +1,11 @@
 package fun.moystudio.openlink.gui;
 
+import com.mojang.blaze3d.pipeline.RenderPipeline;
 import fun.moystudio.openlink.logic.Utils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 
@@ -21,7 +23,7 @@ public class ImageWidget extends AbstractWidget {
 
     @Override
     protected void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
-        guiGraphics.blit(RenderType::guiTextured,texture,this.getX(),this.getY(), uOffset, vOffset,width,height,textureWidth,textureHeight);
+        guiGraphics.blit(RenderPipelines.GUI_TEXTURED,texture,this.getX(),this.getY(), uOffset, vOffset,width,height,textureWidth,textureHeight);
     }
 
     @Override

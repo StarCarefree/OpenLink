@@ -39,7 +39,7 @@ public final class OpenLinkNeoForge {
         EventCallbacks.onClientTick(Minecraft.getInstance());
     }
 
-    @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
+    @EventBusSubscriber
     public static final class ModEventSubscriber {
         @SubscribeEvent
         public static void onFinishLoading(FMLLoadCompleteEvent event) {

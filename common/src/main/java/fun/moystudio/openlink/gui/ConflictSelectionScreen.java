@@ -67,10 +67,6 @@ public class ConflictSelectionScreen extends Screen {
             return super.getRowWidth() + 50;
         }
 
-        protected void renderBackground(GuiGraphics guiGraphics, int i, int j, float f) {
-            ConflictSelectionScreen.this.renderBackground(guiGraphics, i, j, f);
-        }
-
         public boolean isFocused() {
             return ConflictSelectionScreen.this.getFocused() == this;
         }

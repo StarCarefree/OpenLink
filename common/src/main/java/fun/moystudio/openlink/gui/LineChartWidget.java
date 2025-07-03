@@ -6,6 +6,8 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
@@ -103,7 +105,7 @@ public class LineChartWidget extends AbstractWidget {
                 guiGraphics.fill(pointX - pointScale, pointY - pointScale, pointX + pointScale, pointY + pointScale, 0xff66ccff);
             }
             if(tooltip){
-                guiGraphics.renderComponentTooltip(this.font, Arrays.stream(new Component[]{Utils.literalText(dataPoints.get(tooltipindex).getFirst()+", "+dataPoints.get(tooltipindex).getSecond()+"MiB")}).toList(), i ,j);
+                guiGraphics.renderTooltip(this.font, Arrays.stream(new ClientTooltipComponent[]{ClientTooltipComponent.create((Utils.literalText(dataPoints.get(tooltipindex).getFirst()+", "+dataPoints.get(tooltipindex).getSecond()+"MiB")).getVisualOrderText())}).toList(), i ,j, DefaultTooltipPositioner.INSTANCE, null);
             }
             for (int k = 0; k < dataX.size(); k++) {
                 String toRender=dataPoints.get(k).getFirst();//x轴刻度标签
