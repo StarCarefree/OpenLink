@@ -161,9 +161,9 @@ public class OpenFrpFrpcImpl implements Frpc{
                     usergroupnumber=3;
                 }else if(userinfo.data.group.contains("vip")){
                     usergroupnumber=2;
-                }else if(now.group.contains("normal")){
+                }else if(userinfo.data.group.contains("normal")){
                     usergroupnumber=1;
-                }else if(now.group.contains("dev")){
+                }else if(userinfo.data.group.contains("dev")){
                     usergroupnumber=5;
                 }
                 if(groupnumber1>usergroupnumber||!now.protocolSupport.tcp||now.status!=200||now.fullyLoaded||(now.needRealname&&!userinfo.data.realname)){

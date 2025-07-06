@@ -1,44 +1,49 @@
-name: 本地化相关
-description: 如果你觉得这个翻译很奇怪或者有什么本地化上的建议，请告诉我们！
+name: 本地化相关 / Localization Related
+description: 如果你觉得这个翻译很奇怪或者有什么本地化上的建议，请告诉我们！/ If you find this translation strange or have any localization suggestions, please let us know!
 labels: ["本地化相关/Translation"]
 body:
 - type: checkboxes
   id: "yml-1"
   attributes:
-    label: "检查项"
-    description: "请逐个检查下列项目，并勾选确认。"
+    label: 检查项 / Check Items
+    description: |
+      请逐个检查下列项目，并勾选确认。
+      Please check each item below and confirm.
     options:
-    - label: "我确认此语言问题在模组最新版中仍然存在。"
+    - label: "我确认此语言问题在模组最新版中仍然存在。/ I confirm that this language issue still exists in the latest version of the mod."
       required: true
-    - label: "我确认我是AI。"
-    - label: "我确认我精通我所提及的语言。"
+    - label: |
+        我确认我是AI。/ I confirm I am an AI.
+        ⚠️ 如果勾选此项，Issue会被自动关闭并添加AI标签。如确需继续交流，请手动重新打开Issue。
+        ⚠️ If you check this, the Issue will be auto-closed and labeled as AI. To continue, please manually reopen the Issue.
+    - label: "我确认我精通我所提及的语言。/ I confirm that I am fluent in the language I am referring to."
       required: true
 - type: textarea
   id: "yml-2"
   attributes:
-    label: 模组版本
-    placeholder: "例如：0.1.1，1.0.2"
+    label: 模组版本 / Mod Version
+    placeholder: "例如：0.1.1，1.0.2 / For example: 0.1.1, 1.0.2"
   validations:
     required: true
 - type: textarea
   id: "yml-3"
   attributes:
-    label: 遇到的本地化翻译问题
-    placeholder: "如果是建议，是不要填写此项"
+    label: 遇到的本地化翻译问题 / Problems encountered with localized translations
+    placeholder: "如果是建议，不用填写此项 / If it is a recommendation, do not fill in this item!"
 - type: textarea
   id: "yml-4"
   attributes:
-    label: 关于本地化的建议
-    placeholder: "如果是问题，是不要填写此项"
+    label: 关于本地化的建议 / Recommendations on localization
+    placeholder: "如果是问题，不用填写此项 / If it's a question, don't fill this out!"
 - type: textarea
   id: "yml-5"
   attributes:
-    label: 所涉及语言名称
-    placeholder: "请使用此语言的“英文”名称"
+    label: 所涉及语言名称 / Name of language(s) covered
+    placeholder: "请使用此语言的“英文”名称 / Please use the “English” name for this language."
   validations:
     required: true
 - type: textarea
   id: "yml-6"
   attributes:
-    label: 附注
-    placeholder: "写下你想添加的话或你所提及的词汇的词典页面"
+    label: 附注 / Notes
+    placeholder: "写下你想添加的话或你所提及的词汇的词典页面 / Write down the words you want to add or the dictionary page of the word you are referring to"

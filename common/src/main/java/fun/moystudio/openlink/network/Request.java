@@ -1,7 +1,10 @@
 package fun.moystudio.openlink.network;
 
+import com.google.gson.internal.JavaVersion;
 import com.mojang.datafixers.util.Pair;
+import fun.moystudio.openlink.OpenLink;
 import fun.moystudio.openlink.frpcimpl.OpenFrpFrpcImpl;
+import net.minecraft.client.Minecraft;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -18,6 +21,7 @@ public class Request {
     public final static Map<String,List<String>> DEFAULT_HEADER=new HashMap<>(){{
         put("Content-Type", Collections.singletonList("application/json"));
         put("Accept", Collections.singletonList("application/json"));
+        put("User-Agent", Collections.singletonList("OpenLink/"+OpenLink.VERSION+" (Minecraft "+Minecraft.getInstance().getLaunchedVersion()+"; Java "+JavaVersion.getMajorJavaVersion() +")"));
     }};
 
     public static Pair<String,Map<String, List<String>>> POST(String url, Map<String,List<String>> header, String body) throws Exception {

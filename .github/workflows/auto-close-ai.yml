@@ -1,0 +1,21 @@
+name: Auto-close AI Issue
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  close_if_ai:
+    runs-on: ubuntu-latest
+    if: github.event.issue.body && contains(github.event.issue.body, '我确认我是AI') || contains(github.event.issue.body, 'I confirm I am an AI')
+    steps:
+      - name: Add AI label
+        uses: actions-ecosystem/action-add-labels@v1
+        with:
+          github_token: ${{ secrets.OPENLINK_BOT }}
+          labels: AI
+      - name: Close issue
+        uses: peter-evans/close-issue@v3
+        with:
+          comment: |
+            ⚠️ 此Issue因勾选“我确认我是AI”已被自动关闭并打上AI标签。如需继续交流，请手动重新打开本Issue。
+            ⚠️ This issue was auto-closed and labeled as AI because "I confirm I am an AI" was checked. If you wish to continue, please manually reopen this issue.
