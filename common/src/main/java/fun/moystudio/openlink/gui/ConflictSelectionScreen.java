@@ -43,8 +43,8 @@ public class ConflictSelectionScreen extends Screen {
     public void render(GuiGraphics guiGraphics, int i, int j, float f) {
         super.render(guiGraphics,i,j,f);
         conflictSelectionList.render(guiGraphics,i,j,f);
-        text.renderCentered(guiGraphics,this.width/2,16,16,0xffffff);
-        guiGraphics.drawCenteredString(this.font,Utils.translatableText("text.openlink.conflict_tip"),this.width/2,this.height-58,0xffffff);
+        text.renderCentered(guiGraphics,this.width/2,16,16,0xffffffff);
+        guiGraphics.drawCenteredString(this.font,Utils.translatableText("text.openlink.conflict_tip"),this.width/2,this.height-58,0xffffffff);
     }
 
     class ConflictSelectionList extends ObjectSelectionList<ConflictSelectionList.Entry>{
@@ -102,7 +102,7 @@ public class ConflictSelectionScreen extends Screen {
 
             @Override
             public void render(GuiGraphics guiGraphics, int i, int j, int k, int l, int m, int n, int o, boolean bl, float f) {
-                guiGraphics.drawCenteredString(ConflictSelectionScreen.this.font, modid+": "+clazz.getSimpleName(),ConflictSelectionList.this.width/2,j+1, 0xffffff);
+                guiGraphics.drawCenteredString(ConflictSelectionScreen.this.font, modid+": "+clazz.getSimpleName(),ConflictSelectionList.this.width/2,j+1, 0xffffffff);
             }
         }
     }

@@ -55,10 +55,10 @@ public class NodeSelectionScreen extends Screen {
         if(selectionList!=null){
             selectionList.render(guiGraphics,i,j,f);
             if(selectionList.userInfo!=null&&selectionList.userInfo.data!=null&&!selectionList.userInfo.data.realname) {
-                guiGraphics.drawString(this.minecraft.font, Utils.translatableText("text.openlink.realnametounlock"),0,this.height-this.minecraft.font.lineHeight, 0xffffff);
+                guiGraphics.drawString(this.minecraft.font, Utils.translatableText("text.openlink.realnametounlock"),0,this.height-this.minecraft.font.lineHeight, 0xffffffff);
             }
         }
-        guiGraphics.drawCenteredString(this.font,this.title,this.width/2,16,0xffffff);
+        guiGraphics.drawCenteredString(this.font,this.title,this.width/2,16,0xffffffff);
         done.render(guiGraphics,i,j,f);
     }
 

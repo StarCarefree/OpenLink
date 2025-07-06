@@ -51,7 +51,7 @@ public class FrpcImplSelectionScreen extends Screen {
         if(selectionList!=null){
             selectionList.render(guiGraphics,i,j,f);
         }
-        guiGraphics.drawCenteredString(this.font,this.title,this.width/2,16,0xffffff);
+        guiGraphics.drawCenteredString(this.font,this.title,this.width/2,16,0xffffffff);
         done.render(guiGraphics,i,j,f);
         update.render(guiGraphics,i,j,f);
     }

@@ -2,7 +2,6 @@ package fun.moystudio.openlink.gui;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
-import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.datafixers.util.Pair;
 import fun.moystudio.openlink.OpenLink;
 import fun.moystudio.openlink.frpcimpl.FrpcManager;
@@ -118,11 +117,11 @@ public class SettingScreen extends Screen {
             int j=Math.min((this.width-20)/4,(this.height-75)/5*3);
             //UserInfo
             tabUser.add(new ImageWidget(10,65,0,0,j,j,j,j,lastlocationimage));
-            tabUser.add(new ComponentWidget(this.font,10,65+j+5,0xffffff,lastcomponent1,false));
-            tabUser.add(new ComponentWidget(this.font,lastx2,65+j+5,0xacacac,lastcomponent2,false));
-            tabUser.add(new ComponentWidget(this.font,10,65+j+5+10,0xacacac,lastcomponent3,false));
-            tabUser.add(new ComponentWidget(this.font,10,65+j+5+20,0xacacac,lastcomponent4,false));
-            tabUser.add(new ComponentWidget(this.font,10,65+j+5+30,0xacacac,lastcomponent5,false));
+            tabUser.add(new ComponentWidget(this.font,10,65+j+5,0xffffffff,lastcomponent1,false));
+            tabUser.add(new ComponentWidget(this.font,lastx2,65+j+5,0xffacacac,lastcomponent2,false));
+            tabUser.add(new ComponentWidget(this.font,10,65+j+5+10,0xffacacac,lastcomponent3,false));
+            tabUser.add(new ComponentWidget(this.font,10,65+j+5+20,0xffacacac,lastcomponent4,false));
+            tabUser.add(new ComponentWidget(this.font,10,65+j+5+30,0xffacacac,lastcomponent5,false));
             tabUser.add(new LineChartWidget(
                     this.font,
                     10+j+20, 65+5,
@@ -147,11 +146,11 @@ public class SettingScreen extends Screen {
             tabUser.clear();
             int j = Math.min((this.width - 20) / 4, (this.height - 75) / 5 * 3);
             tabUser.add(new ImageWidget(10, 65, 0, 0, j, j, j, j, lastlocationimage));
-            tabUser.add(new ComponentWidget(this.font, 10, 65 + j + 5, 0xffffff, lastcomponent1, false));
-            tabUser.add(new ComponentWidget(this.font, lastx2, 65 + j + 5, 0xacacac, lastcomponent2, false));
-            tabUser.add(new ComponentWidget(this.font, 10, 65 + j + 5 + 10, 0xacacac, lastcomponent3, false));
-            tabUser.add(new ComponentWidget(this.font, 10, 65 + j + 5 + 20, 0xacacac, lastcomponent4, false));
-            tabUser.add(new ComponentWidget(this.font, 10, 65 + j + 5 + 30, 0xacacac, lastcomponent5, false));
+            tabUser.add(new ComponentWidget(this.font, 10, 65 + j + 5, 0xffffffff, lastcomponent1, false));
+            tabUser.add(new ComponentWidget(this.font, lastx2, 65 + j + 5, 0xffacacac, lastcomponent2, false));
+            tabUser.add(new ComponentWidget(this.font, 10, 65 + j + 5 + 10, 0xffacacac, lastcomponent3, false));
+            tabUser.add(new ComponentWidget(this.font, 10, 65 + j + 5 + 20, 0xffacacac, lastcomponent4, false));
+            tabUser.add(new ComponentWidget(this.font, 10, 65 + j + 5 + 30, 0xffacacac, lastcomponent5, false));
             tabUser.add(new LineChartWidget(
                     this.font,
                     10 + j + 20, 65 + 5,
@@ -196,7 +195,7 @@ public class SettingScreen extends Screen {
             tabLogin_User.add(new ImageWidget(this.width/2-20-32,(this.height-75)/2+60-32,0,0,64,64,64,64,icon));
             tabLogin_User.add(Button.builder(Utils.translatableText("text.openlink.login"),(button -> this.minecraft.setScreen(loginScreen))).bounds(this.width/2+20,(this.height-75)/2+60-10,40,20).build());
         } else {
-            tabLogin_User.add(new ComponentWidget(this.font, this.width/2, (this.height-75)/2+60-10, 0xffffff, Utils.translatableText("temp.openlink.tobedone"), true));
+            tabLogin_User.add(new ComponentWidget(this.font, this.width/2, (this.height-75)/2+60-10, 0xffffffff, Utils.translatableText("temp.openlink.tobedone"), true));
         }
         //Log
         tabLog.add(lastlogselectionlist);
@@ -205,8 +204,8 @@ public class SettingScreen extends Screen {
         //Setting
         tabSetting.add(new ChartWidget(10,65,this.buttonSetting.getX()+this.buttonSetting.getWidth()-10-5,40, Utils.translatableText("text.openlink.secure"),0x8f2b2b2b));
         tabSetting.add(new ChartWidget(10,65+40+10, this.buttonSetting.getX()+this.buttonSetting.getWidth()-10-5, 40, Utils.translatableText("text.openlink.nodes"),0x8f2b2b2b));
-        tabSetting.add(new ComponentWidget(this.font,15,87,0xffffff, Utils.translatableText("setting.openlink.information_show"),false));
-        tabSetting.add(new ComponentWidget(this.font,15,87+40+10,0xffffff, Utils.translatableText("setting.openlink.node_hide"),false));
+        tabSetting.add(new ComponentWidget(this.font,15,87,0xffffffff, Utils.translatableText("setting.openlink.information_show"),false));
+        tabSetting.add(new ComponentWidget(this.font,15,87+40+10,0xffffffff, Utils.translatableText("setting.openlink.node_hide"),false));
         tabSetting.add(CycleButton.onOffBuilder(sensitiveInfoHiding).displayOnlyValue().create(this.buttonSetting.getX()+this.buttonSetting.getWidth()-75-5,80,75,20, Utils.translatableText("setting.information_show"),(cycleButton, object) -> {
             sensitiveInfoHiding = object;
             OpenLink.PREFERENCES.putBoolean("setting_sensitive_info_hiding", object);

@@ -111,22 +111,22 @@ public class LineChartWidget extends AbstractWidget {
                 String toRender=dataPoints.get(k).getFirst();//x轴刻度标签
                 if(toRender.contains(" ")){
                     String[] arrayToRender=toRender.split(" ");
-                    guiGraphics.drawCenteredString(font, arrayToRender[0], dataX.get(k), y2 + 5, 0xffffff);
-                    guiGraphics.drawCenteredString(font, arrayToRender[1], dataX.get(k), y2 + 5 + font.lineHeight, 0xffffff);
+                    guiGraphics.drawCenteredString(font, arrayToRender[0], dataX.get(k), y2 + 5, 0xffffffff);
+                    guiGraphics.drawCenteredString(font, arrayToRender[1], dataX.get(k), y2 + 5 + font.lineHeight, 0xffffffff);
                 }
                 else {
-                    guiGraphics.drawCenteredString(font, toRender, dataX.get(k), y2 + 5, 0xffffff);
+                    guiGraphics.drawCenteredString(font, toRender, dataX.get(k), y2 + 5, 0xffffffff);
                 }
             }
             for (int k = 1; k <= 5; k++) {
                 int y = beginY - k * (height - 5) / 5;
-                guiGraphics.drawString(font, String.format("%.1f", k * maxDataVal.getSecond() / 5.0), x1 - font.width(String.format("%.1f", k * maxDataVal.getSecond() / 5.0)), y - 3, 0xffffff);//y轴刻度标签
+                guiGraphics.drawString(font, String.format("%.1f", k * maxDataVal.getSecond() / 5.0), x1 - font.width(String.format("%.1f", k * maxDataVal.getSecond() / 5.0)), y - 3, 0xffffffff);//y轴刻度标签
             }
         } else {
             guiGraphics.drawCenteredString(font, Utils.translatableText("text.openlink.nodata"),this.getX()+(x2-this.getX())/2,this.getY()+(y2-this.getY())/2,0x7f66ccff);
         }
-        guiGraphics.drawCenteredString(font,labelX,x2-10,y2-10,0xffffff);//x轴标签
-        guiGraphics.drawString(font,labelY,x1,this.getY()-5,0xffffff);//y轴标签
+        guiGraphics.drawCenteredString(font,labelX,x2-10,y2-10,0xffffffff);//x轴标签
+        guiGraphics.drawString(font,labelY,x1,this.getY()-5,0xffffffff);//y轴标签
     }
 
     @Override

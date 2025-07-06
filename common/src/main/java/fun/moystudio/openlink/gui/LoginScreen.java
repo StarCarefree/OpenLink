@@ -74,8 +74,8 @@ public class LoginScreen extends Screen {
     @Override
     public void render(GuiGraphics guiGraphics, int i, int j, float f) {
         super.render(guiGraphics, i, j, f);
-        guiGraphics.drawString(this.font, Utils.translatableText("text.openlink.frptip", FrpcManager.getInstance().getCurrentFrpcName()),0, this.height-this.font.lineHeight, 0xffffff);
-        loginTips.renderCentered(guiGraphics, this.width / 2, 15, 16, 0xffffff);
+        guiGraphics.drawString(this.font, Utils.translatableText("text.openlink.frptip", FrpcManager.getInstance().getCurrentFrpcName()),0, this.height-this.font.lineHeight, 0xffffffff);
+        loginTips.renderCentered(guiGraphics, this.width / 2, 15, 16, 0xffffffff);
     }
 
     @Override
