@@ -175,6 +175,8 @@ public class NewShareToLanScreen extends Screen {
         allowpvp=CycleButton.onOffBuilder(LanConfig.cfg.allow_pvp).create(this.width / 2 + 5, 130, 150, 20, Utils.translatableText("mco.configure.world.pvp"),(cycleButton, object) -> LanConfig.cfg.allow_pvp=object);
         this.addButton(onlinemode);
         this.addButton(allowpvp);
+        this.addButton(new ImageButtonWithHoveredState(this.width / 2 + 5 + 150 + 10, this.height - 28,
+                20, 20, 0, 0, 20, SETTING, SETTING_HOVERED, 20, 20, (button) -> this.minecraft.setScreen(new SettingScreen(new NewShareToLanScreen(this.lastScreen)))));
         if(OpenLink.disabled) return;
         editBox=new EditBox(this.font,this.width / 2 + 5, 190, 150, 20, editBox, Utils.translatableText("text.openlink.remote_port"));
         editBox.setSuggestion(Utils.translatableText("text.openlink.remote_port").getString());
@@ -190,8 +192,6 @@ public class NewShareToLanScreen extends Screen {
         }));
         this.addButton(nodeselection);
         this.addButton(usingfrp);
-        this.addButton(new ImageButtonWithHoveredState(this.width / 2 + 5 + 150 + 10, this.height - 28,
-                20, 20, 0, 0, 20, SETTING, SETTING_HOVERED, 20, 20, (button) -> this.minecraft.setScreen(new SettingScreen(new NewShareToLanScreen(this.lastScreen)))));
     }
 
     public void render(PoseStack poseStack, int i, int j, float f) {
