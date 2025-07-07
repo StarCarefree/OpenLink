@@ -1,5 +1,5 @@
 {
-  "cycle.openlink.fixuuid": "离线模式+UUID修复",
+  "cycle.openlink.fixuuid": "离线 + UUID修复",
   "cycle.openlink.offlinemode": "离线模式",
   "cycle.openlink.onlinemode": "在线模式",
   "gui.openlink.frpcselectionscreentitle": "选择FRP服务",
