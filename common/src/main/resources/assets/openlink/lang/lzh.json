@@ -1,7 +1,11 @@
 {
   "cycle.openlink.offlinemode": "去网之制",
   "cycle.openlink.onlinemode": "连网之制",
+  "gui.openlink.frpcselectionscreentitle": "FRP 服务遴选",
+  "gui.openlink.loginscreentitle": "Natayark出入户书之",
   "gui.openlink.nodeselectionscreentitle": "节点之择",
+  "gui.openlink.settingscreentitle": "OpenLink以新令为之",
+  "gui.openlink.updatefrpctitle": "§L§g新的frpc版本可用!",
   "tab.openlink.setting_info": "涉",
   "tab.openlink.setting_log": "代行之事记",
   "tab.openlink.setting_setting": "设定之项",
