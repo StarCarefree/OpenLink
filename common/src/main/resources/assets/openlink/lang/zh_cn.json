@@ -1,5 +1,4 @@
 {
-  "cycle.openlink.fixuuid": "离线 + UUID修复",
   "cycle.openlink.offlinemode": "离线模式",
   "cycle.openlink.onlinemode": "在线模式",
   "gui.openlink.frpcselectionscreentitle": "选择FRP服务",
@@ -43,7 +42,6 @@
   "text.openlink.nodes": "节点",
   "text.openlink.nofrpcfile": "§3无法在存储目录中找到 frpc 可执行文件。\n§o§l§c请下载它。\n§o§l§c（您可以跳过下载但所有联机隧道将被禁用）",
   "text.openlink.now": "目前",
-  "text.openlink.onlinemodebutton": "验证模式",
   "text.openlink.openstoragedir": "打开存储目录",
   "text.openlink.outdated": "§c过时",
   "text.openlink.proxycount": "活动隧道： %s/%s",
