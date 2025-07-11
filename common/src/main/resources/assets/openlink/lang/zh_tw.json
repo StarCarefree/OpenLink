@@ -1,4 +1,5 @@
 {
+  "cycle.openlink.fixuuid": "離線 + UUID 修正",
   "cycle.openlink.offlinemode": "離線模式",
   "cycle.openlink.onlinemode": "在線模式",
   "gui.openlink.frpcselectionscreentitle": "FRP 服務選擇",
@@ -42,6 +43,7 @@
   "text.openlink.nodes": "節點",
   "text.openlink.nofrpcfile": "§3FRPC可執行檔在儲存目錄中找不到。\n§o§l§c請下載它。\n§o§l§c(如果跳過，代理功能將會停用)",
   "text.openlink.now": "當前",
+  "text.openlink.onlinemodebutton": "驗證模式",
   "text.openlink.openstoragedir": "開啟儲存資料夾",
   "text.openlink.outdated": "§c過時囉",
   "text.openlink.proxycount": "有效代理：%s/%s",
