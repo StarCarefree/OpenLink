@@ -308,7 +308,6 @@ public class SettingScreen extends Screen {
 
     @Override
     public void render(GuiGraphics guiGraphics, int i, int j, float f){
-        renderBackground(guiGraphics,i,j,f);
         guiGraphics.blit(RenderType::guiTextured,BACKGROUND_SETTING,0,0,0,0,this.width,this.height,this.width,this.height);
         guiGraphics.fill(5,60,this.buttonSetting.getX()+this.buttonSetting.getWidth(),this.height-5,0x8F000000);
         title.renderCentered(guiGraphics,this.width/2,15);
