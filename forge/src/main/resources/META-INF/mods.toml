@@ -26,6 +26,6 @@ side = "CLIENT"
 modId = "minecraft"
 mandatory = true
 # Change Minecraft Version here(version migrate)
-versionRange = "[1.21.4,)"
+versionRange = "[1.21.5,)"
 ordering = "NONE"
 side = "CLIENT"
