@@ -38,7 +38,6 @@
   "text.openlink.nodata": "無資料 (先前未使用代理服務)",
   "text.openlink.node_autoselect": "自動選擇節點",
   "text.openlink.node_available": "§a§l可用",
-  "text.openlink.node_needrealname": "§6§l要求實名驗證",
   "text.openlink.node_unavailable": "§c§l不可用",
   "text.openlink.nodes": "節點",
   "text.openlink.nofrpcfile": "§3FRPC可執行檔在儲存目錄中找不到。\n§o§l§c請下載它。\n§o§l§c(如果跳過，代理功能將會停用)",
