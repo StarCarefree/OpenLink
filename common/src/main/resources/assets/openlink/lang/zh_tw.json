@@ -58,6 +58,7 @@
   "text.openlink.updatefrpc": "§l§g找到新的frpc版本！§b現在更新？",
   "text.openlink.updatingfrpc": "§o§6更新frpc...§7(可能需要花點時間)",
   "text.openlink.userproxieslimited": "§c§l已達到最大代理限制。\n請刪除未使用的代理。",
+  "text.openlink.usingfrp": "使用 FRP 服務",
   "text.openlink.webpanel": "%s 網站控制台",
   "text.openlink.wiki": "OpenLink 維基",
   "text.openlink.x_axis_label": "時間",
