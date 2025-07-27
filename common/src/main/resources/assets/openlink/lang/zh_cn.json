@@ -58,6 +58,7 @@
   "text.openlink.updatefrpc": "§l§g发现了一个新的frpc版本! §b是否立即更新？",
   "text.openlink.updatingfrpc": "§o§s正在更新frpc......§7(这可能会耗费少许时间)",
   "text.openlink.userproxieslimited": "§c§l您的账户已创建的隧道数达到最大。\n请删除一个隧道后重试。",
+  "text.openlink.usingfrp": "使用 FRP 服务",
   "text.openlink.webpanel": "%s 网页面板",
   "text.openlink.wiki": "OpenLink维基",
   "text.openlink.x_axis_label": "时间",
