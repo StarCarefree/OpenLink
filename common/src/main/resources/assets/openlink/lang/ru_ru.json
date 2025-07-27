@@ -38,7 +38,6 @@
   "text.openlink.nodata": "Нет данных (Прокси сервер не использовался ранее)",
   "text.openlink.node_autoselect": "Автовыбор узла",
   "text.openlink.node_available": "§a§lДоступно",
-  "text.openlink.node_needrealname": "§6§lТребуется проверка реального имени",
   "text.openlink.node_unavailable": "§c§lНедоступно",
   "text.openlink.nodes": "Узлы",
   "text.openlink.nofrpcfile": "§3Исполняемый файл FRPC не найден в папке хранения.\n§o§l§cПожалуйста установите его.\n§o§l§c(Если пропущено функции прокси будут отключены)",
