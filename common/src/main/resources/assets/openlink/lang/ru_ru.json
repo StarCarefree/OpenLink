@@ -38,6 +38,7 @@
   "text.openlink.nodata": "Нет данных (Прокси сервер не использовался ранее)",
   "text.openlink.node_autoselect": "Автовыбор узла",
   "text.openlink.node_available": "§a§lДоступно",
+  "text.openlink.node_needrealname": "§6§lТребуется Реальное Имя",
   "text.openlink.node_unavailable": "§c§lНедоступно",
   "text.openlink.nodes": "Узлы",
   "text.openlink.nofrpcfile": "§3Исполняемый файл FRPC не найден в папке хранения.\n§o§l§cПожалуйста установите его.\n§o§l§c(Если пропущено функции прокси будут отключены)",
@@ -57,8 +58,10 @@
   "text.openlink.updatefrpc": "§l§gНайдена новая версия frpc! §bОбновить сейчас?",
   "text.openlink.updatingfrpc": "§o§6Обновление Frpc...§7(Может занять некоторое время)",
   "text.openlink.userproxieslimited": "§c§lДостигнуто максимальное количество прокси.\nПожалуйста, удалите неиспользуемые прокси.",
+  "text.openlink.usingfrp": "Использующийся FRP Сервис",
   "text.openlink.webpanel": "%s Веб-панель",
   "text.openlink.wiki": "OpenLink Вики",
   "text.openlink.x_axis_label": "Время",
-  "text.openlink.y_axis_label": "Трафик (MiB)"
+  "text.openlink.y_axis_label": "Трафик (MiB)",
+  "text.openlink.daily_sign": "Ежедневная подпись"
 }
