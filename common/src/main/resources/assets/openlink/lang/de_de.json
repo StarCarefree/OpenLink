@@ -1,6 +1,9 @@
 {
+  "cycle.openlink.fixuuid": "Offline Mode + UUID Korrektur",
   "cycle.openlink.offlinemode": "Offline Modi",
   "cycle.openlink.onlinemode": "Online Modi",
+  "gui.openlink.frpcselectionscreentitle": "FRP Dienstauswahl",
+  "gui.openlink.loginscreentitle": "Natayark-Konto anmelden",
   "gui.openlink.nodeselectionscreentitle": "Wählen das Schwingungsknoten",
   "tab.openlink.setting_info": "Informationen über Sie",
   "tab.openlink.setting_log": "Tunnel log",
