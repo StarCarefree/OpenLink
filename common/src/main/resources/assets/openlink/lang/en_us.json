@@ -62,6 +62,7 @@
   "text.openlink.webpanel": "%s Web Panel",
   "text.openlink.wiki": "OpenLink Wiki",
   "text.openlink.x_axis_label": "Time",
-  "text.openlink.y_axis_label": "Traffic (MiB)",
-  "text.openlink.daily_sign": "Daily Sign"
+  "text.openlink.y_axis_label": "Traffic",
+  "text.openlink.daily_sign": "Daily Sign",
+  "text.openlink.y_axis_label_with_unit": "%s (%s)"
 }

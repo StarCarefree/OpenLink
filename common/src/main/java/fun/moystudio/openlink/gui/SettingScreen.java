@@ -1,5 +1,7 @@
 package fun.moystudio.openlink.gui;
 
+//也是ds写得，我也搞不懂这些玩意
+
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.mojang.blaze3d.platform.Window;
@@ -91,7 +93,7 @@ public class SettingScreen extends Screen {
     }
 
     @Override
-    protected void init(){
+    public void init(){
         title=MultiLineLabel.create(this.font, Utils.translatableText("gui.openlink.settingscreentitle"));
         int i=(this.width-10)/4;
         buttonUser=new SettingScreenButton(5,40,i,20,SettingTabs.USER.component,(button -> tab=SettingTabs.USER));
@@ -123,13 +125,13 @@ public class SettingScreen extends Screen {
             tabUser.add(new ComponentWidget(this.font,10,65+j+5+20,0xacacac,lastcomponent4,false));
             tabUser.add(new ComponentWidget(this.font,10,65+j+5+30,0xacacac,lastcomponent5,false));
             tabUser.add(new LineChartWidget(
+                    this, // 传入当前 Screen 实例
                     this.font,
                     10+j+20, 65+5,
                     this.width-20, 60+this.height-75-15,
-                    Utils.translatableText("text.openlink.x_axis_label"), Utils.translatableText("text.openlink.y_axis_label"), lastdatapoints,
-                    (dataXY, poseStack, i1, j1)-> renderComponentTooltip(poseStack,
-                            Arrays.stream(new Component[]{Utils.literalText(dataXY.getFirst()+", "+dataXY.getSecond()+"MiB")}).toList(),
-                            i1,j1)));
+                    Utils.translatableText("text.openlink.x_axis_label"),
+                    Utils.translatableText("text.openlink.y_axis_label"),
+                    lastdatapoints));
             tabUser.add(new Button(10,65+j+5+40,j-25,20,Utils.translatableText("text.openlink.logout"),button -> {
                 FrpcManager.getInstance().getCurrentFrpcInstance().logOut();
                 this.minecraft.setScreen(new SettingScreen(lastscreen));
@@ -155,13 +157,13 @@ public class SettingScreen extends Screen {
             tabUser.add(new ComponentWidget(this.font,10,65+j+5+20,0xacacac,lastcomponent4,false));
             tabUser.add(new ComponentWidget(this.font,10,65+j+5+30,0xacacac,lastcomponent5,false));
             tabUser.add(new LineChartWidget(
+                    this, // 传入当前 Screen 实例
                     this.font,
                     10+j+20, 65+5,
                     this.width-20, 60+this.height-75-15,
-                    Utils.translatableText("text.openlink.x_axis_label"), Utils.translatableText("text.openlink.y_axis_label"), lastdatapoints,
-                    (dataXY, poseStack, i1, j1)-> renderComponentTooltip(poseStack,
-                            Arrays.stream(new Component[]{Utils.literalText(dataXY.getFirst()+", "+dataXY.getSecond()+"MiB")}).toList(),
-                            i1,j1)));
+                    Utils.translatableText("text.openlink.x_axis_label"),
+                    Utils.translatableText("text.openlink.y_axis_label"),
+                    lastdatapoints));
             tabUser.add(new Button(10,65+j+5+40,j-25,20,Utils.translatableText("text.openlink.logout"),button -> {
                 FrpcManager.getInstance().getCurrentFrpcInstance().logOut();
                 this.minecraft.setScreen(new SettingScreen(lastscreen));
@@ -386,7 +388,7 @@ public class SettingScreen extends Screen {
 
     WebTextureResourceLocation wrlof,wrlsf;
 
-    private void onTab() {
+    public void onTab() {
         boolean first=lasttab!=tab;
         switch(tab){
             case LOG -> {

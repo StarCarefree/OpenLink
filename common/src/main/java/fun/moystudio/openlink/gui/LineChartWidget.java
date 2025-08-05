@@ -1,5 +1,7 @@
 package fun.moystudio.openlink.gui;
 
+//其实都是ds写得，我可搞不懂这些玩意
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import fun.moystudio.openlink.logic.Utils;
@@ -7,131 +9,230 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-//是哪个大聪明想出来让我写折线统计图的？？？（zirran不要删注释后面调试用，这玩意真的难写）
+//不小心把terry感谢Bresenham的注释删了awa
 public class LineChartWidget extends GuiComponent implements Widget, GuiEventListener {
-    public List<Pair<String,Long>> dataPoints;
-    //左上——右下
-    public int x1,y1,x2,y2,width,height;
+    public List<Pair<String, Long>> dataPoints;
+    public int x1, y1, x2, y2, width, height;
     public Font font;
-    public Component labelX,labelY;
-    public OnTooltip onTooltip;
+    public Component labelX, labelY;
+    private final Screen parentScreen;
 
-
-    public LineChartWidget(Font font, int x1, int y1, int x2, int y2, Component labelX,Component labelY, List<Pair<String,Long>> dataPoints, OnTooltip onTooltip){
-        this.font=font;
-        this.dataPoints=dataPoints;
-        this.labelX=labelX;
-        this.labelY=labelY;
-        this.x1=x1;
-        this.y1=y1;
-        this.x2=x2;
-        this.y2=y2;
-        this.width=x2-x1+1;
-        this.height=y2-y1+1;
-        this.onTooltip=onTooltip;
+    public LineChartWidget(Screen parentScreen, Font font, int x1, int y1, int x2, int y2,
+                           Component labelX, Component labelY,
+                           List<Pair<String, Long>> dataPoints) {
+        this.parentScreen = parentScreen;
+        this.font = font;
+        this.dataPoints = dataPoints;
+        this.labelX = labelX;
+        this.labelY = labelY;
+        this.x1 = x1;
+        this.y1 = y1;
+        this.x2 = x2;
+        this.y2 = y2;
+        this.width = x2 - x1 + 1;
+        this.height = y2 - y1 + 1;
     }
 
-    private void drawLine(PoseStack poseStack,int x1, int y1, int x2, int y2, int color) {
-        //I love u Bresenham!!!
-        //最喜欢Bresenham的一集（感谢他发明了直线算法，不然我还要去调RenderSystem的那一堆逆天方法）
-        int dx=Math.abs(x2-x1);
-        int dy=Math.abs(y2-y1);
-        int sx=(x1<x2)?1:-1;
-        int sy=(y1<y2)?1:-1;
-        int err=dx-dy;
-        while(true){
-            fill(poseStack,x1,y1,x1+1,y1+1,color);
-            if(x1==x2&&y1==y2){
-                break;
+    private void drawLine(PoseStack poseStack, int x1, int y1, int x2, int y2, int color) {
+        int dx = Math.abs(x2 - x1);
+        int dy = Math.abs(y2 - y1);
+        int sx = (x1 < x2) ? 1 : -1;
+        int sy = (y1 < y2) ? 1 : -1;
+        int err = dx - dy;
+
+        while(true) {
+            fill(poseStack, x1, y1, x1 + 1, y1 + 1, color);
+            if(x1 == x2 && y1 == y2) break;
+
+            int e2 = err * 2;
+            if(e2 > -dy) {
+                err -= dy;
+                x1 += sx;
             }
-            int e2=err*2;
-            if(e2>-dy){
-                err-=dy;
-                x1+=sx;
-            }
-            if(e2<dx) {
-                err+=dx;
-                y1+=sy;
+            if(e2 < dx) {
+                err += dx;
+                y1 += sy;
             }
         }
     }
 
+    private double ceilToNiceNumber(double value) {
+        if (value <= 0) return 10;
+
+        int exponent = (int) Math.floor(Math.log10(value));
+        double base = Math.pow(10, exponent);
+        double normalized = value / base;
+
+        double[] niceNumbers = {1, 5, 10};
+        for (double nice : niceNumbers) {
+            if (normalized <= nice) {
+                return nice * base;
+            }
+        }
+        return 1 * Math.pow(10, exponent + 1);
+    }
 
     @Override
-    public void render(PoseStack poseStack, int i, int j, float f) {
-        //左下——右上
+    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+        // 左下——右上坐标系
         int beginX = x1, beginY = y2, endX = x2, endY = y1;
-        int x1=this.x1;
-        Pair<String, Long> maxDataVal = dataPoints.stream().max(Comparator.comparingLong(Pair::getSecond)).orElse(new Pair<>("nope", 1L));//最大值
-        if(dataPoints.size()>1&&font.width(String.format("%.1f",(double)maxDataVal.getSecond()))>font.width("114")){
-            x1+=font.width(String.format("%.1f",(double)maxDataVal.getSecond()))-font.width("114");
-            beginX=x1;
-            width=x2-x1+1;
+        int adjustedX1 = this.x1;
+
+        // 计算最大值
+        Pair<String, Long> maxDataVal = dataPoints.stream()
+                .max(Comparator.comparingLong(Pair::getSecond))
+                .orElse(new Pair<>("nope", 1L));
+
+        // 单位转换逻辑
+        double maxValue = maxDataVal.getSecond();
+        String unit = "MiB";
+        if (maxValue > 1024) {
+            maxValue /= 1024.0; // 转换为GiB
+            unit = "GiB";
         }
-        hLine(poseStack, beginX, endX, beginY, 0xffffffff);//x轴
-        vLine(poseStack, beginX, beginY, endY, 0xffffffff);//y轴
-        if(dataPoints.size()>1){
+
+        // 数值取整
+        double ceiledMax = ceilToNiceNumber(maxValue);
+        String maxValueStr = String.format("%.1f", ceiledMax);
+
+        // 调整Y轴位置防止溢出
+        if(dataPoints.size() > 1 && font.width(maxValueStr + " " + unit) > font.width("114")) {
+            adjustedX1 += font.width(maxValueStr + " " + unit) - font.width("114");
+            beginX = adjustedX1;
+            width = x2 - adjustedX1 + 1;
+        }
+
+        // 绘制坐标轴
+        hLine(poseStack, beginX, endX, beginY, 0xffffffff); // x轴
+        vLine(poseStack, beginX, beginY, endY, 0xffffffff); // y轴
+
+        if(dataPoints.size() > 1) {
+            // 绘制刻度线
             for (int k = 1; k <= 5; k++) {
                 int y = beginY - k * (height - 5) / 5;
-                hLine(poseStack, beginX, endX, y, 0x7fffffff);//y轴刻度横线
+                hLine(poseStack, beginX, endX, y, 0x7fffffff);
             }
-            float xScale = (float) (width - 10) / (dataPoints.size() - 1);//x轴数据放大倍数（留了10的空间）
-            float yScale = (float) (height - 5) / maxDataVal.getSecond();//y轴数据放大倍数（留了5的空间）
-            int pointScale;
-            for (int k = 0; k < dataPoints.size() - 1; k++) {//size-1条线（打OI打的：越界会RE的）
+
+            // 计算比例尺（考虑单位转换）
+            float yScale;
+            if (unit.equals("GiB")) {
+                yScale = (float) (height - 5) / (float) ceiledMax;
+            } else {
+                yScale = (float) (height - 5) / maxDataVal.getSecond();
+            }
+
+            float xScale = (float) (width - 10) / (dataPoints.size() - 1);
+
+            // 绘制折线
+            for (int k = 0; k < dataPoints.size() - 1; k++) {
+                double val1 = unit.equals("GiB") ?
+                        dataPoints.get(k).getSecond() / 1024.0 :
+                        dataPoints.get(k).getSecond();
+
+                double val2 = unit.equals("GiB") ?
+                        dataPoints.get(k + 1).getSecond() / 1024.0 :
+                        dataPoints.get(k + 1).getSecond();
+
                 int x11 = (int) (beginX + 5 + k * xScale);
-                int y1 = (int) (beginY - dataPoints.get(k).getSecond() * yScale);
-                int x2 = (int) (beginX + 5 + (k + 1) * xScale);
-                int y2 = (int) (beginY - dataPoints.get(k + 1).getSecond() * yScale);
-                drawLine(poseStack, x11, y1, x2, y2, 0x7f66ccff);
+                int y1 = (int) (beginY - val1 * yScale);
+                int x22 = (int) (beginX + 5 + (k + 1) * xScale);
+                int y2 = (int) (beginY - val2 * yScale);
+
+                drawLine(poseStack, x11, y1, x22, y2, 0x7f66ccff);
             }
+
+            // 绘制数据点和交互
             List<Integer> dataX = new ArrayList<>();
-            boolean tooltip=false;
-            int tooltipindex = 0;
-            for (int k = 0; k < dataPoints.size(); k++) {//size个点
-                pointScale = 2;
+            boolean tooltip = false;
+            int tooltipIndex = 0;
+            Component tooltipText = null;
+
+            for (int k = 0; k < dataPoints.size(); k++) {
+                double val = unit.equals("GiB") ?
+                        dataPoints.get(k).getSecond() / 1024.0 :
+                        dataPoints.get(k).getSecond();
+
+                int pointScale = 2;
                 int pointX = (int) (beginX + 5 + k * xScale);
-                int pointY = (int) (beginY - dataPoints.get(k).getSecond() * yScale);
+                int pointY = (int) (beginY - val * yScale);
                 dataX.add(pointX);
-                if (i >= pointX - pointScale && i <= pointX + pointScale && j >= pointY - pointScale && j <= pointY + pointScale) {
+
+                // 检测鼠标悬停
+                if (mouseX >= pointX - pointScale && mouseX <= pointX + pointScale &&
+                        mouseY >= pointY - pointScale && mouseY <= pointY + pointScale) {
+
                     pointScale = pointScale * 3 / 2;
-                    tooltip=true;
-                    tooltipindex=k;
+                    tooltip = true;
+                    tooltipIndex = k;
+
+                    // 准备工具提示文本
+                    double displayValue = unit.equals("GiB") ?
+                            dataPoints.get(k).getSecond() / 1024.0 :
+                            dataPoints.get(k).getSecond();
+
+                    tooltipText = Utils.literalText(
+                            String.format("%s, %.1f %s",
+                                    dataPoints.get(k).getFirst(),
+                                    displayValue,
+                                    unit)
+                    );
                 }
-                fill(poseStack, pointX - pointScale, pointY - pointScale, pointX + pointScale, pointY + pointScale, 0xff66ccff);
+
+                fill(poseStack,
+                        pointX - pointScale, pointY - pointScale,
+                        pointX + pointScale, pointY + pointScale,
+                        0xff66ccff);
             }
-            if(tooltip){
-                onTooltip.onTooltip(new Pair<>(dataPoints.get(tooltipindex).getFirst(), dataPoints.get(tooltipindex).getSecond()), poseStack, i, j);
+
+            // 显示工具提示 - 使用Screen的renderTooltip方法
+            if (tooltip && tooltipText != null && parentScreen != null) {
+                parentScreen.renderTooltip(poseStack, tooltipText, mouseX, mouseY);
             }
+
+            // 绘制X轴标签
             for (int k = 0; k < dataX.size(); k++) {
-                String toRender=dataPoints.get(k).getFirst();//x轴刻度标签
-                if(toRender.contains(" ")){
-                    String[] arrayToRender=toRender.split(" ");
-                    drawCenteredString(poseStack, font, arrayToRender[0], dataX.get(k), y2 + 5, 0xffffff);
-                    drawCenteredString(poseStack, font, arrayToRender[1], dataX.get(k), y2 + 5 + font.lineHeight, 0xffffff);
-                }
-                else {
+                String toRender = dataPoints.get(k).getFirst();
+                if (toRender.contains(" ")) {
+                    String[] parts = toRender.split(" ");
+                    drawCenteredString(poseStack, font, parts[0], dataX.get(k), y2 + 5, 0xffffff);
+                    drawCenteredString(poseStack, font, parts[1], dataX.get(k), y2 + 5 + font.lineHeight, 0xffffff);
+                } else {
                     drawCenteredString(poseStack, font, toRender, dataX.get(k), y2 + 5, 0xffffff);
                 }
             }
+            //Y轴标签
             for (int k = 1; k <= 5; k++) {
                 int y = beginY - k * (height - 5) / 5;
-                drawString(poseStack, font, String.format("%.1f", k * maxDataVal.getSecond() / 5.0), x1 - font.width(String.format("%.1f", k * maxDataVal.getSecond() / 5.0)), y - 3, 0xffffff);//y轴刻度标签
+                double value = k * ceiledMax / 5.0;
+                // 修改：只显示整数，不带单位
+                String label = String.format("%d", (int) value);
+                drawString(poseStack, font, label,
+                        adjustedX1 - font.width(label),
+                        y - 3,
+                        0xffffff);
             }
         } else {
-            drawCenteredString(poseStack,font, Utils.translatableText("text.openlink.nodata"),x1+(x2-x1)/2,y1+(y2-y1)/2,0x7f66ccff);
+            // 无数据提示
+            drawCenteredString(poseStack, font,
+                    Utils.translatableText("text.openlink.nodata"),
+                    x1 + (x2 - x1) / 2,
+                    y1 + (y2 - y1) / 2,
+                    0x7f66ccff);
         }
-        drawCenteredString(poseStack,font,labelX,x2-10,y2-10,0xffffff);//x轴标签
-        drawString(poseStack,font,labelY,x1,y1-5,0xffffff);//y轴标签
-    }
 
-    public interface OnTooltip {
-        void onTooltip(Pair<String,Long> dataXY, PoseStack poseStack, int i, int j);
+        // 绘制坐标轴标签
+        drawCenteredString(poseStack, font, labelX, x2 - 10, y2 - 10, 0xffffff);
+        drawString(poseStack, font, labelY, adjustedX1, y1 - 5, 0xffffff);
+
+        Component fullLabelY = Utils.translatableText("text.openlink.y_axis_label_with_unit",
+                labelY.getString(), unit);
+        drawString(poseStack, font, fullLabelY, adjustedX1, y1 - 5, 0xffffff);
     }
 }
