@@ -33,7 +33,7 @@ public final class OpenLink {
     private static final List<Pair<String,String>> CONFLICT_CLASS_NAME=Arrays.asList(//Do NOT use Class object here!!!!!!!(By Terry_MC)
             Pair.of("mcwifipnp","io.github.satxm.mcwifipnp.ShareToLanScreenNew"),
             Pair.of("lanserverproperties","rikka.lanserverproperties.ModifyLanScreen"),
-            Pair.of("easylan","org.xiaoxian.gui.GuiShareToLanEdit.GuiShareToLanModified")
+            Pair.of("easylan","org.xiaoxian.gui.GuiShareToLanEdit$GuiShareToLanModified")
     );
 
 
